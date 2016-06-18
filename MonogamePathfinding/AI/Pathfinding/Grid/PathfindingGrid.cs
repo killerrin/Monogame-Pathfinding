@@ -48,5 +48,37 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return true;
         }
 
+        public IList<IGridNode> GetEntireGrid()
+        {
+            List<IGridNode> nodes = new List<IGridNode>();
+            for (int x = 0; x < Width; x++)
+            {
+                nodes.AddRange(GetXColumn(x));
+            }
+
+            return nodes;
+        }
+
+        public IList<IGridNode> GetXColumn(int column)
+        {
+            List<IGridNode> nodes = new List<IGridNode>();
+            for (int y = 0; y < Height; y++)
+            {
+                nodes.Add(Grid[column, y]);
+            }
+
+            return nodes;
+        }
+
+        public IList<IGridNode> GetYRow(int row)
+        {
+            List<IGridNode> nodes = new List<IGridNode>();
+            for (int x = 0; x < Width; x++)
+            {
+                nodes.Add(Grid[x, row]);
+            }
+
+            return nodes;
+        }
     }
 }
