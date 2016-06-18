@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogamePathfinding.AI.Pathfinding
+namespace MonogamePathfinding.AI.Pathfinding.Grid
 {
     public struct NodePosition
     {

@@ -38,15 +38,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AI\Pathfinding\AStarEngine.cs" />
+    <Compile Include="AI\Pathfinding\AStarPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\DiagonalDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanSquaredDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\IPathfindingHeuristic.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\ManhattonDistance.cs" />
-    <Compile Include="AI\Pathfinding\IPathfindingGrid.cs" />
+    <Compile Include="AI\Pathfinding\Grid\IPathfindingGrid.cs" />
+    <Compile Include="AI\Pathfinding\Grid\IGridNode.cs" />
+    <Compile Include="AI\Pathfinding\IPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
-    <Compile Include="AI\Pathfinding\NodePosition.cs" />
+    <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
+    <Compile Include="AI\Pathfinding\TraversalSettings.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\PriorityQueueNode.cs" />
     <Compile Include="Game1.cs" />

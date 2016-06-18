@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonogamePathfinding.AI.Pathfinding.Grid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,17 @@ namespace MonogamePathfinding.AI.Pathfinding
     public interface IPathfindingNode
     {
         IPathfindingNode Parent { get; set; }
+        IGridNode GridNode { get; }
+    }
 
-        NodePosition Position { get; }
-        float MovementCost { get; }
+    public class PathfindingNode : IPathfindingNode
+    {
+        public IPathfindingNode Parent { get; set; }
+        public IGridNode GridNode { get; }
+
+        public PathfindingNode(IGridNode gridNode)
+        {
+            GridNode = gridNode;
+        }
     }
 }
