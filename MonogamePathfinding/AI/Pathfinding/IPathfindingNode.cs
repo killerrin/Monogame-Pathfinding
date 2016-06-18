@@ -12,20 +12,4 @@ namespace MonogamePathfinding.AI.Pathfinding
         IPathfindingNode Parent { get; set; }
         IGridNode GridNode { get; }
     }
-
-    public class PathfindingNode : IPathfindingNode
-    {
-        public IPathfindingNode Parent { get; set; }
-        public IGridNode GridNode { get; }
-
-        public PathfindingNode(IGridNode gridNode)
-        {
-            GridNode = gridNode;
-        }
-        public PathfindingNode(IGridNode gridNode, IPathfindingNode parent)
-        {
-            GridNode = gridNode;
-            Parent = parent;
-        }
-    }
 }
