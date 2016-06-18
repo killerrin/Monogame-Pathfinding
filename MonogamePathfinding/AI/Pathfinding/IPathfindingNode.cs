@@ -22,5 +22,10 @@ namespace MonogamePathfinding.AI.Pathfinding
         {
             GridNode = gridNode;
         }
+        public PathfindingNode(IGridNode gridNode, IPathfindingNode parent)
+        {
+            GridNode = gridNode;
+            Parent = parent;
+        }
     }
 }

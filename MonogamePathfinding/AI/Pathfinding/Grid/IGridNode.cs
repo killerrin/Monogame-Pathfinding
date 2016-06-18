@@ -10,7 +10,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
     {
         NodePosition Position { get; }
 
-        float MovementCost { get; set; }
+        int MovementCost { get; set; }
         TraversalSettings Navigatable { get; set; }
     }
 
@@ -18,8 +18,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
     {
         public NodePosition Position { get; }
 
-        private float m_movementCost;
-        public float MovementCost
+        private int m_movementCost;
+        public int MovementCost
         {
             get { lock (m_lockObject) { return m_movementCost; } }
             set { lock (m_lockObject) { m_movementCost = value; } }
@@ -36,10 +36,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         public GridNode(NodePosition position)
         {
             Position = position;
-            MovementCost = 0;
+            MovementCost = 10;
             Navigatable = TraversalSettings.Passable;
         }
-        public GridNode(NodePosition position, float movementCost, TraversalSettings traversable)
+        public GridNode(NodePosition position, int movementCost, TraversalSettings traversable)
         {
             Position = position;
             MovementCost = movementCost;

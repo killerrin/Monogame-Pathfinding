@@ -9,6 +9,9 @@ namespace MonogamePathfinding.AI.Pathfinding
 {
     public interface IPathfindingEngine
     {
-        object FindPath(NodePosition startPosition, NodePosition endPosition);
+        IPathfindingGrid Grid { get; }
+        int BaseMovementCost { get; set; }
+
+        IPathfindingNode FindPath(NodePosition startPosition, NodePosition endPosition);
     }
 }

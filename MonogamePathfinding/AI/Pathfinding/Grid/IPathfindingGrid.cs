@@ -36,7 +36,9 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             }
         }
 
+        public IGridNode this[NodePosition position] { get { return FindNode(position); } }
         public IGridNode this[int x, int y] { get { return FindNode(x, y); } }
+
         public IGridNode FindNode(NodePosition position) => FindNode(position.X, position.Y);
         public IGridNode FindNode(int x, int y)
         {
