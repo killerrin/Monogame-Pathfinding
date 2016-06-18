@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonogamePathfinding.AI.Pathfinding.Grid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Heuristics
     public interface IPathfindingHeuristic
     {
         bool AllowsDiagonalMovement { get; }
-        float CalculateHeuristic(NodePosition currentNode, NodePosition destinationNode, int horizontalTravelCost, int diagnolTravelCost);
+        float CalculateHeuristic(NodePosition currentNode, NodePosition destinationNode, int horizontalMovementCost, int diagnolMovementCost);
     }
 }
