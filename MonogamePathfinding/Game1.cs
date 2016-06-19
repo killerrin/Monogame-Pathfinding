@@ -180,14 +180,12 @@ namespace MonogamePathfinding
                 }
             }
 
-            NewPathfinding();
+            RandomizeStartEndPositions();
         }
 
-        private void NewPathfinding()
+        private void RandomizeStartEndPositions()
         {
-            Debug.WriteLine("New Pathfinding ");
-            Stopwatch stopwatch = new Stopwatch();
-
+            Debug.WriteLine("Randomize Start End Positions");
             var entireGrid = Grid.GetEntireGrid();
             if (entireGrid.Count == 0) return;
 
@@ -195,7 +193,7 @@ namespace MonogamePathfinding
             while (true)
             {
                 var gridCell = entireGrid[random.Next(entireGrid.Count)];
-                if (gridCell.Navigatable == TraversalSettings.Passable)
+                if (gridCell?.Navigatable == TraversalSettings.Passable)
                 {
                     StartGridCell = gridCell;
                     break;
@@ -207,7 +205,7 @@ namespace MonogamePathfinding
             while (true)
             {
                 var gridCell = entireGrid[random.Next(entireGrid.Count)];
-                if (gridCell.Navigatable == TraversalSettings.Passable)
+                if (gridCell?.Navigatable == TraversalSettings.Passable)
                 {
                     EndGridCell = gridCell;
                     break;
@@ -215,13 +213,20 @@ namespace MonogamePathfinding
             }
             //Debug.WriteLine("End While(true)");
 
+            Pathfind();
+        }
+
+        private void Pathfind()
+        {
             Debug.WriteLine($"Begin Pathfind");
+            Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+
             PathfindingEngine = new AStarPathfindingEngine(10, Grid, new ManhattonDistance());
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
+
             stopwatch.Stop();
             Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms | {stopwatch.Elapsed.TotalSeconds}s");
-
         }
 
 
@@ -240,7 +245,7 @@ namespace MonogamePathfinding
 
             if (e.Key == Keys.Space)
             {
-                NewPathfinding();
+                RandomizeStartEndPositions();
             }
         }
     }

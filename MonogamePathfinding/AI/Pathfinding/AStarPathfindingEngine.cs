@@ -25,6 +25,9 @@ namespace MonogamePathfinding.AI.Pathfinding
 
         public IPathfindingNode FindPath(NodePosition startPosition, NodePosition endPosition)
         {
+            if (!Grid.WithinGrid(startPosition)) return null;
+            if (!Grid.WithinGrid(endPosition)) return null;
+
             // Create the opened and closed lists
             List<IPathfindingNode> closedList = new List<IPathfindingNode>();
             PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList = new PriorityQueue<PriorityQueueNode<IPathfindingNode>>();
