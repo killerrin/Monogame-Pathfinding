@@ -22,10 +22,10 @@ namespace MonogamePathfinding
         InputListenerManager _inputManager;
         Texture2D blankTexture;
 
-        public const int GRID_CELL_WIDTH = 20;
-        public const int GRID_CELL_HEIGHT = 20;
-        public const int GRID_WIDTH = 25;
-        public const int GRID_HEIGHT = 25;
+        public const int GRID_CELL_WIDTH = 10;
+        public const int GRID_CELL_HEIGHT = 10;
+        public const int GRID_WIDTH = 80;
+        public const int GRID_HEIGHT = 80;
         public const int RANDOM_MAZE_VALUE = 43;
 
         public IPathfindingEngine PathfindingEngine;
@@ -50,7 +50,7 @@ namespace MonogamePathfinding
         protected override void Initialize()
         {
             graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
 
             _inputManager = new InputListenerManager();
@@ -123,34 +123,34 @@ namespace MonogamePathfinding
                 spriteBatch.Draw(blankTexture, position, colour);
             }
 
-            IPathfindingNode currentNode = Path;
-            while (true)
+            if (Path != null)
             {
+                IPathfindingNode currentNode = Path;
+                while (currentNode != null)
+                {
+                    spriteBatch.Draw(blankTexture,
+                                     new Rectangle(currentNode.GridNode.Position.X * GRID_CELL_WIDTH,
+                                                   currentNode.GridNode.Position.Y * GRID_CELL_HEIGHT,
+                                                   GRID_CELL_WIDTH,
+                                                   GRID_CELL_HEIGHT),
+                                     Color.Yellow);
+
+                    currentNode = currentNode.Parent;
+                }
+
                 spriteBatch.Draw(blankTexture,
-                                 new Rectangle(currentNode.GridNode.Position.X * GRID_CELL_WIDTH,
-                                               currentNode.GridNode.Position.Y * GRID_CELL_HEIGHT,
+                                 new Rectangle(StartGridCell.Position.X * GRID_CELL_WIDTH,
+                                               StartGridCell.Position.Y * GRID_CELL_HEIGHT,
                                                GRID_CELL_WIDTH,
                                                GRID_CELL_HEIGHT),
-                                 Color.Yellow);
-
-                if (currentNode.Parent == null)
-                    break;
-                else
-                    currentNode = currentNode.Parent;
+                                 Color.Green);
+                spriteBatch.Draw(blankTexture,
+                                 new Rectangle(EndGridCell.Position.X * GRID_CELL_WIDTH,
+                                               EndGridCell.Position.Y * GRID_CELL_HEIGHT,
+                                               GRID_CELL_WIDTH,
+                                               GRID_CELL_HEIGHT),
+                                 Color.Red);
             }
-
-            spriteBatch.Draw(blankTexture, 
-                             new Rectangle(StartGridCell.Position.X * GRID_CELL_WIDTH,
-                                           StartGridCell.Position.Y * GRID_CELL_HEIGHT,
-                                           GRID_CELL_WIDTH,
-                                           GRID_CELL_HEIGHT), 
-                             Color.Green);
-            spriteBatch.Draw(blankTexture,
-                             new Rectangle(EndGridCell.Position.X * GRID_CELL_WIDTH,
-                                           EndGridCell.Position.Y * GRID_CELL_HEIGHT,
-                                           GRID_CELL_WIDTH,
-                                           GRID_CELL_HEIGHT),
-                             Color.Red);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -185,11 +185,13 @@ namespace MonogamePathfinding
 
         private void NewPathfinding()
         {
-            Debug.WriteLine("New Pathfinding");
+            Debug.WriteLine("New Pathfinding ");
+            Stopwatch stopwatch = new Stopwatch();
 
             var entireGrid = Grid.GetEntireGrid();
             if (entireGrid.Count == 0) return;
 
+            //Debug.WriteLine("While(true): Randomizing Start Position");
             while (true)
             {
                 var gridCell = entireGrid[random.Next(entireGrid.Count)];
@@ -199,7 +201,9 @@ namespace MonogamePathfinding
                     break;
                 }
             }
+            //Debug.WriteLine("End While(true)");
 
+            //Debug.WriteLine("While(true): Randomizing End Position");
             while (true)
             {
                 var gridCell = entireGrid[random.Next(entireGrid.Count)];
@@ -209,16 +213,25 @@ namespace MonogamePathfinding
                     break;
                 }
             }
+            //Debug.WriteLine("End While(true)");
 
+            Debug.WriteLine($"Begin Pathfind");
+            stopwatch.Start();
             PathfindingEngine = new AStarPathfindingEngine(10, Grid, new ManhattonDistance());
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
+            stopwatch.Stop();
+            Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms | {stopwatch.Elapsed.TotalSeconds}s");
+
         }
 
 
         private void KeyboardListener_KeyTyped(object sender, KeyboardEventArgs e)
         {
             if (e.Key == Keys.Escape)
+            {
+                Debug.WriteLine("Exit");
                 base.Exit();
+            }
 
             if (e.Key == Keys.R)
             {
