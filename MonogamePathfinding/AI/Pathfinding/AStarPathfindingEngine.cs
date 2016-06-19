@@ -39,7 +39,7 @@ namespace MonogamePathfinding.AI.Pathfinding
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
-            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(startingPathfindingNode, 0));
+            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
 
             // Set up the current node at our starting position
             IPathfindingNode currentNode = startingPathfindingNode;
@@ -132,7 +132,9 @@ namespace MonogamePathfinding.AI.Pathfinding
         #region Opened/Closed List Helper Methods
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
-            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(node, (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, node.GridNode.MovementCost, node.GridNode.MovementCost)));
+            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
+                (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, node.GridNode.MovementCost, node.GridNode.MovementCost),
+                node));
         }
         private void AddToClosedList(List<IPathfindingNode> closedList, IPathfindingNode node)
         {

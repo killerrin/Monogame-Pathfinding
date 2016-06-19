@@ -8,13 +8,13 @@ namespace MonogamePathfinding.Collections
 {
     public class PriorityQueueNode<T> : IComparable<PriorityQueueNode<T>>
     {
-        public T Data;
         public readonly int Priority;
+        public T Data;
 
-        public PriorityQueueNode(T data, int priority)
+        public PriorityQueueNode(int priority, T data)
         {
-            Data = data;
             Priority = priority;
+            Data = data;
         }
 
         public override string ToString()
