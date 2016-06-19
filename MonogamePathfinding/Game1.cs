@@ -1,6 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.InputListeners;
+using MonogamePathfinding.AI.Pathfinding;
+using MonogamePathfinding.AI.Pathfinding.Grid;
+using MonogamePathfinding.AI.Pathfinding.Heuristics;
+using System;
+using System.Diagnostics;
 
 namespace MonogamePathfinding
 {
@@ -11,8 +17,24 @@ namespace MonogamePathfinding
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Random random = new Random();
+        InputListenerManager _inputManager;
         Texture2D blankTexture;
 
+        public const int GRID_CELL_WIDTH = 20;
+        public const int GRID_CELL_HEIGHT = 20;
+        public const int GRID_WIDTH = 25;
+        public const int GRID_HEIGHT = 25;
+        public const int RANDOM_MAZE_VALUE = 43;
+
+        public IPathfindingEngine PathfindingEngine;
+        public IPathfindingGrid Grid;
+        public IGridNode StartGridCell;
+        public IGridNode EndGridCell;
+        public IPathfindingNode Path;
+
+        #region Initialization
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,7 +49,13 @@ namespace MonogamePathfinding
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.ApplyChanges();
+
+            _inputManager = new InputListenerManager();
+            var keyboardListener = _inputManager.AddListener(new KeyboardListenerSettings());
+            keyboardListener.KeyTyped += KeyboardListener_KeyTyped;
 
             base.Initialize();
         }
@@ -54,7 +82,9 @@ namespace MonogamePathfinding
         {
             // TODO: Unload any non ContentManager content here
         }
+        #endregion
 
+        #region Update Draw
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -62,11 +92,9 @@ namespace MonogamePathfinding
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (Grid == null) ResetGrid();
 
-            // TODO: Add your update logic here
-
+            _inputManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -78,9 +106,129 @@ namespace MonogamePathfinding
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            var entireGrid = Grid.GetEntireGrid();
+            spriteBatch.Begin();
+
+            foreach (var cell in entireGrid)
+            {
+                Color colour = Color.White;
+                if (cell.Navigatable == TraversalSettings.Unpassable)
+                    colour = Color.Black;
+
+                Rectangle position = new Rectangle(cell.Position.X * GRID_CELL_WIDTH,
+                                                   cell.Position.Y * GRID_CELL_HEIGHT,
+                                                   GRID_CELL_WIDTH,
+                                                   GRID_CELL_HEIGHT);
+
+                spriteBatch.Draw(blankTexture, position, colour);
+            }
+
+            IPathfindingNode currentNode = Path;
+            while (true)
+            {
+                spriteBatch.Draw(blankTexture,
+                                 new Rectangle(currentNode.GridNode.Position.X * GRID_CELL_WIDTH,
+                                               currentNode.GridNode.Position.Y * GRID_CELL_HEIGHT,
+                                               GRID_CELL_WIDTH,
+                                               GRID_CELL_HEIGHT),
+                                 Color.Yellow);
+
+                if (currentNode.Parent == null)
+                    break;
+                else
+                    currentNode = currentNode.Parent;
+            }
+
+            spriteBatch.Draw(blankTexture, 
+                             new Rectangle(StartGridCell.Position.X * GRID_CELL_WIDTH,
+                                           StartGridCell.Position.Y * GRID_CELL_HEIGHT,
+                                           GRID_CELL_WIDTH,
+                                           GRID_CELL_HEIGHT), 
+                             Color.Green);
+            spriteBatch.Draw(blankTexture,
+                             new Rectangle(EndGridCell.Position.X * GRID_CELL_WIDTH,
+                                           EndGridCell.Position.Y * GRID_CELL_HEIGHT,
+                                           GRID_CELL_WIDTH,
+                                           GRID_CELL_HEIGHT),
+                             Color.Red);
+            spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+        #endregion
+
+        private void ResetGrid()
+        {
+            Debug.WriteLine("Resetting Grid");
+            Grid = new PathfindingGrid(GRID_WIDTH, GRID_HEIGHT);
+            var entireGrid = Grid.GetEntireGrid();
+            foreach (var gridCell in entireGrid)
+            {
+                if (gridCell.Position.X == 0 || gridCell.Position.Y == 0 ||
+                    gridCell.Position.X == (Grid.Width - 1) ||
+                    gridCell.Position.Y == (Grid.Height - 1))
+                {
+                    gridCell.Navigatable = TraversalSettings.Unpassable;
+                }
+                else
+                {
+                    int i = random.Next(0, 50);
+                    if (i < RANDOM_MAZE_VALUE)
+                        gridCell.Navigatable = TraversalSettings.Passable;
+                    else
+                        gridCell.Navigatable = TraversalSettings.Unpassable;
+                }
+            }
+
+            NewPathfinding();
+        }
+
+        private void NewPathfinding()
+        {
+            Debug.WriteLine("New Pathfinding");
+
+            var entireGrid = Grid.GetEntireGrid();
+            if (entireGrid.Count == 0) return;
+
+            while (true)
+            {
+                var gridCell = entireGrid[random.Next(entireGrid.Count)];
+                if (gridCell.Navigatable == TraversalSettings.Passable)
+                {
+                    StartGridCell = gridCell;
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                var gridCell = entireGrid[random.Next(entireGrid.Count)];
+                if (gridCell.Navigatable == TraversalSettings.Passable)
+                {
+                    EndGridCell = gridCell;
+                    break;
+                }
+            }
+
+            PathfindingEngine = new AStarPathfindingEngine(10, Grid, new ManhattonDistance());
+            Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
+        }
+
+
+        private void KeyboardListener_KeyTyped(object sender, KeyboardEventArgs e)
+        {
+            if (e.Key == Keys.Escape)
+                base.Exit();
+
+            if (e.Key == Keys.R)
+            {
+                ResetGrid();
+            }
+
+            if (e.Key == Keys.Space)
+            {
+                NewPathfinding();
+            }
         }
     }
 }

@@ -39,6 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI\Pathfinding\AStarPathfindingEngine.cs" />
+    <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
+    <Compile Include="AI\Pathfinding\Grid\PathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\DiagonalDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanSquaredDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanDistance.cs" />
@@ -49,10 +51,12 @@
     <Compile Include="AI\Pathfinding\IPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
-    <Compile Include="AI\Pathfinding\TraversalSettings.cs" />
+    <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />
+    <Compile Include="AI\Pathfinding\PathfindingNode.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\PriorityQueueNode.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
