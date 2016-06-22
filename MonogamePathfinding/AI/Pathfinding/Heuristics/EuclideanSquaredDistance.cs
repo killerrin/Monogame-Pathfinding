@@ -9,7 +9,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Heuristics
 {
     public class EuclideanSquaredDistance : IPathfindingHeuristic
     {
-        public bool AllowsDiagonalMovement { get { return true; } }
+        public bool UsesDiagonalMovement { get { return true; } }
 
         float IPathfindingHeuristic.CalculateHeuristic(NodePosition currentNode, NodePosition destinationNode, int horizontalMovementCost, int diagnolMovementCost)
         {

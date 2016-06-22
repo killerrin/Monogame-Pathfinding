@@ -9,8 +9,10 @@ namespace MonogamePathfinding.AI.Pathfinding
 {
     public interface IPathfindingEngine
     {
-        IPathfindingGrid Grid { get; }
+        bool AllowDiagonalMovement { get; set; }
         int BaseMovementCost { get; set; }
+        int BaseDiagonalMovementCost { get; set; }
+        IPathfindingGrid Grid { get; }
 
         IPathfindingNode FindPath(NodePosition startPosition, NodePosition endPosition);
     }

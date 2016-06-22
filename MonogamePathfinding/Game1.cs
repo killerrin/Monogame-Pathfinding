@@ -222,7 +222,7 @@ namespace MonogamePathfinding
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            PathfindingEngine = new AStarPathfindingEngine(10, Grid, new ManhattonDistance());
+            PathfindingEngine = new AStarPathfindingEngine(true, 10, 14, Grid, new ManhattonDistance());
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
             stopwatch.Stop();

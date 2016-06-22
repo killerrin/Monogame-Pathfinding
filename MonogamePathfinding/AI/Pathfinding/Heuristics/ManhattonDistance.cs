@@ -9,7 +9,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Heuristics
 {
     public class ManhattonDistance : IPathfindingHeuristic
     {
-        public bool AllowsDiagonalMovement { get { return false; } }
+        public bool UsesDiagonalMovement { get { return false; } }
 
         float IPathfindingHeuristic.CalculateHeuristic(NodePosition currentNode, NodePosition destinationNode, int horizontalMovementCost, int diagnolMovementCost)
         {

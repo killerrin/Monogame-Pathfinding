@@ -11,14 +11,17 @@ namespace MonogamePathfinding.AI.Pathfinding
 {
     public class AStarPathfindingEngine : IPathfindingEngine
     {
-        public IPathfindingGrid Grid { get; }
+        public bool AllowDiagonalMovement { get; set; }
         public int BaseMovementCost { get; set; }
+        public int BaseDiagonalMovementCost { get; set; }
+        public IPathfindingGrid Grid { get; }
 
         public IPathfindingHeuristic HeuristicCalculator { get; set; }
 
-        public AStarPathfindingEngine(int baseMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
+        public AStarPathfindingEngine(bool allowDiagonalMovement, int movementCost, int diagonalMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
         {
-            BaseMovementCost = baseMovementCost;
+            BaseMovementCost = movementCost;
+            BaseDiagonalMovementCost = diagonalMovementCost;
             Grid = grid;
             HeuristicCalculator = heuristic;
         }
@@ -104,7 +107,7 @@ namespace MonogamePathfinding.AI.Pathfinding
             positions.Add(centerNode.GridNode.Position.East());
             positions.Add(centerNode.GridNode.Position.West());
 
-            if (HeuristicCalculator.AllowsDiagonalMovement)
+            if (AllowDiagonalMovement)
             {
                 positions.Add(centerNode.GridNode.Position.NorthEast());
                 positions.Add(centerNode.GridNode.Position.SouthEast());
@@ -132,8 +135,11 @@ namespace MonogamePathfinding.AI.Pathfinding
         #region Opened/Closed List Helper Methods
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
+
             openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
-                (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, node.GridNode.MovementCost, node.GridNode.MovementCost),
+                (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, 
+                BaseMovementCost + node.GridNode.MovementCost,
+                BaseDiagonalMovementCost + node.GridNode.MovementCost),
                 node));
         }
         private void AddToClosedList(List<IPathfindingNode> closedList, IPathfindingNode node)

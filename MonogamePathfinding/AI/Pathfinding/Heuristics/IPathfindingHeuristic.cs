@@ -9,7 +9,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Heuristics
 {
     public interface IPathfindingHeuristic
     {
-        bool AllowsDiagonalMovement { get; }
+        bool UsesDiagonalMovement { get; }
         float CalculateHeuristic(NodePosition currentNode, NodePosition destinationNode, int horizontalMovementCost, int diagnolMovementCost);
     }
 }
