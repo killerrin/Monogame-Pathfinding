@@ -26,7 +26,7 @@ namespace MonogamePathfinding.AI.Pathfinding
             HeuristicCalculator = heuristic;
         }
 
-        public IPathfindingNode FindPath(NodePosition startPosition, NodePosition endPosition)
+        public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
         {
             if (!Grid.WithinGrid(startPosition)) return null;
             if (!Grid.WithinGrid(endPosition)) return null;
@@ -63,7 +63,7 @@ namespace MonogamePathfinding.AI.Pathfinding
                     if (endingPathfindingNode.GridNode.Position == node.GridNode.Position)
                     {
                         endingPathfindingNode.Parent = currentNode;
-                        return endingPathfindingNode;
+                        return new PathfindingResult(this, endingPathfindingNode, closedList, openedList.Select(x => x.Data).ToList());
                     }
 
                     if (!ClosedListContains(closedList, node))
@@ -95,7 +95,7 @@ namespace MonogamePathfinding.AI.Pathfinding
             }
 
             // Sadly, there is no path to our target so we return null
-            return null;
+            return new PathfindingResult(this, null, closedList, new List<IPathfindingNode>());
         }
 
         private List<IPathfindingNode> GetAdjacentNodes(IPathfindingNode centerNode)

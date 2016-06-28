@@ -53,6 +53,7 @@
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />
     <Compile Include="AI\Pathfinding\PathfindingNode.cs" />
+    <Compile Include="AI\Pathfinding\PathfindingResult.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\PriorityQueueNode.cs" />
     <Compile Include="Game1.cs" />

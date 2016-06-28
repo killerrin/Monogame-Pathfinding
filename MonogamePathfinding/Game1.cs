@@ -32,7 +32,8 @@ namespace MonogamePathfinding
         public IPathfindingGrid Grid;
         public IGridNode StartGridCell;
         public IGridNode EndGridCell;
-        public IPathfindingNode Path;
+        //public IPathfindingNode Path;
+        public PathfindingResult Path;
 
         #region Initialization
         public Game1()
@@ -111,21 +112,40 @@ namespace MonogamePathfinding
 
             foreach (var cell in entireGrid)
             {
-                Color colour = Color.White;
+                Color colour = Color.CornflowerBlue;
                 if (cell.Navigatable == TraversalSettings.Unpassable)
                     colour = Color.Black;
 
-                Rectangle position = new Rectangle(cell.Position.X * GRID_CELL_WIDTH,
-                                                   cell.Position.Y * GRID_CELL_HEIGHT,
-                                                   GRID_CELL_WIDTH,
-                                                   GRID_CELL_HEIGHT);
+                spriteBatch.Draw(blankTexture,
+                                 new Rectangle(cell.Position.X * GRID_CELL_WIDTH,
+                                               cell.Position.Y * GRID_CELL_HEIGHT,
+                                               GRID_CELL_WIDTH,
+                                               GRID_CELL_HEIGHT),
+                                 colour);
+            }
 
-                spriteBatch.Draw(blankTexture, position, colour);
+            foreach (var cell in Path.ClosedList)
+            {
+                spriteBatch.Draw(blankTexture,
+                                 new Rectangle(cell.GridNode.Position.X * GRID_CELL_WIDTH,
+                                               cell.GridNode.Position.Y * GRID_CELL_HEIGHT,
+                                               GRID_CELL_WIDTH,
+                                               GRID_CELL_HEIGHT),
+                                 Color.Gray);
+            }
+            foreach (var cell in Path.OpenedList)
+            {
+                spriteBatch.Draw(blankTexture,
+                                 new Rectangle(cell.GridNode.Position.X * GRID_CELL_WIDTH,
+                                               cell.GridNode.Position.Y * GRID_CELL_HEIGHT,
+                                               GRID_CELL_WIDTH,
+                                               GRID_CELL_HEIGHT),
+                                 Color.Yellow);
             }
 
             if (Path != null)
             {
-                IPathfindingNode currentNode = Path;
+                IPathfindingNode currentNode = Path.Path;
                 while (currentNode != null)
                 {
                     spriteBatch.Draw(blankTexture,
@@ -133,7 +153,7 @@ namespace MonogamePathfinding
                                                    currentNode.GridNode.Position.Y * GRID_CELL_HEIGHT,
                                                    GRID_CELL_WIDTH,
                                                    GRID_CELL_HEIGHT),
-                                     Color.Yellow);
+                                     Color.White);
 
                     currentNode = currentNode.Parent;
                 }
@@ -180,6 +200,9 @@ namespace MonogamePathfinding
                 }
             }
 
+            foreach (var cell in entireGrid)
+                cell.Navigatable = TraversalSettings.Passable;
+
             RandomizeStartEndPositions();
         }
 
@@ -222,7 +245,7 @@ namespace MonogamePathfinding
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            PathfindingEngine = new AStarPathfindingEngine(true, 10, 14, Grid, new ManhattonDistance());
+            PathfindingEngine = new AStarPathfindingEngine(true, 10, 10, Grid, new DiagonalDistance());
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
             stopwatch.Stop();

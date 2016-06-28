@@ -14,6 +14,6 @@ namespace MonogamePathfinding.AI.Pathfinding
         int BaseDiagonalMovementCost { get; set; }
         IPathfindingGrid Grid { get; }
 
-        IPathfindingNode FindPath(NodePosition startPosition, NodePosition endPosition);
+        PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition);
     }
 }
