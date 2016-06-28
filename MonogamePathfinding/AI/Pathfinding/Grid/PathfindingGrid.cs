@@ -42,7 +42,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             if (x < 0 || y < 0)
                 return false;
 
-            if (x > Width || y > Height)
+            if (x >= Width || y >= Height)
                 return false;
 
             return true;
