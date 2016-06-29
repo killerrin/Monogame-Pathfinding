@@ -29,7 +29,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             if (!Grid.WithinGrid(startPosition)) return null;
             if (!Grid.WithinGrid(endPosition)) return null;
 
-            List<IPathfindingNode> closedList = new List<IPathfindingNode>();
+            Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
             Queue<IPathfindingNode> openedQueue = new Queue<IPathfindingNode>();
 
             // Cache the End Node
@@ -45,10 +45,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             while (openedQueue.Count > 0)
             {
                 currentNode = openedQueue.Dequeue();
-                if (ClosedListContains(closedList, currentNode))
-                    continue;
 
-                closedList.Add(currentNode);
+                if (closedList.ContainsKey(currentNode.GridNode.Key())) continue;
+                closedList[currentNode.GridNode.Key()] = currentNode;
+
                 Debug.WriteLine($"OpenList Count: {openedQueue.Count} | Current Node Position: {currentNode.GridNode.Position}");
 
                 // Get all of the Adjacent Nodes and convert them to pathfinding nodes
@@ -65,7 +65,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         Debug.WriteLine("Found Path");
                         endingPathfindingNode.Parent = currentNode;
 
-                        var result = new PathfindingResult(endingPathfindingNode, closedList, openedQueue);
+                        var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedQueue);
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -80,29 +80,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
             }
 
-            return new PathfindingResult(null, closedList, openedQueue);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool ClosedListContains(List<IPathfindingNode> closedList, IPathfindingNode node)
-        {
-            for (int i = 0; i < closedList.Count; i++)
-            {
-                if (closedList[i].GridNode.Position == node.GridNode.Position)
-                    return true;
-            }
-            return false;
-        }
-
-        private bool OpenedQueueContains(Queue<IPathfindingNode> openedQueue, IPathfindingNode node)
-        {
-            foreach (var openedNode in openedQueue)
-            {
-                if (openedNode.GridNode.Position == node.GridNode.Position)
-                    return true;
-            }
-
-            return false;
+            return new PathfindingResult(null, closedList.Values, openedQueue);
         }
     }
 }

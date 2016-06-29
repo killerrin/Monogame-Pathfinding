@@ -43,6 +43,7 @@
     <Compile Include="AI\Pathfinding\Engines\IHeuristicPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\Events\PathfindingEventArgs.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
+    <Compile Include="AI\Pathfinding\Grid\GridNodeExtensions.cs" />
     <Compile Include="AI\Pathfinding\Grid\PathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\DiagonalDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanSquaredDistance.cs" />
