@@ -259,8 +259,8 @@ namespace MonogamePathfinding
         {
             Path = null;
 
-            //Task.Run(() =>
-            //{
+            Task.Run(() =>
+            {
                 if (PathfindingEngine == null)
                     SetPathfindingEngine(0);
 
@@ -272,7 +272,7 @@ namespace MonogamePathfinding
 
                 stopwatch.Stop();
                 Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms, {stopwatch.Elapsed.TotalSeconds}s | Path Found: {path.Path != null} | Total Searched Nodes:{((ICollection)path.ClosedList).Count}");
-            //});
+            });
         }
 
         private void SetPathfindingEngine(int id)
@@ -289,6 +289,12 @@ namespace MonogamePathfinding
             }
 
             PathfindingEngine.PathFound += PathfindingEngine_PathFound;
+            PathfindingEngine.PathInProgress += PathfindingEngine_PathInProgress;
+        }
+
+        private void PathfindingEngine_PathInProgress(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)
+        {
+            Path = args.Result;
         }
 
         private void PathfindingEngine_PathFound(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)

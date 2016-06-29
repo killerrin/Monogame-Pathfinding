@@ -16,6 +16,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         IPathfindingGrid Grid { get; }
 
         PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition);
+
         event PathfindingEventHandler PathFound;
+        event PathfindingEventHandler PathInProgress;
     }
 }

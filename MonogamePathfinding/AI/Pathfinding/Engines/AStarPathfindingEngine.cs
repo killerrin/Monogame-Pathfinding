@@ -2,6 +2,7 @@
 using MonogamePathfinding.AI.Pathfinding.Heuristics;
 using MonogamePathfinding.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using Wintellect.PowerCollections;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -19,6 +21,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public bool AllowDiagonalMovement { get; set; }
         public IPathfindingGrid Grid { get; }
         public event PathfindingEventHandler PathFound;
+        public event PathfindingEventHandler PathInProgress;
 
         //IHeuristicPathfindingEngine
         public int BaseMovementCost { get; set; }
@@ -40,12 +43,12 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         {
             if (!Grid.WithinGrid(startPosition)) return null;
             if (!Grid.WithinGrid(endPosition)) return null;
-            
 
             // Create the opened and closed lists
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
-            BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
             //PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList = new PriorityQueue<PriorityQueueNode<IPathfindingNode>>();
+            BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
+            //OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList = new OrderedSet<PriorityQueueNode<IPathfindingNode>>();
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
@@ -54,15 +57,17 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
-            openedList.Insert(0.0f, startingPathfindingNode);
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
+            openedList.Insert(0.0f, startingPathfindingNode);
+            //openedList.Add(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
 
             // Begin Pathfind
             IPathfindingNode currentNode = null;
             while (openedList.Count > 0)
             {
-                currentNode = openedList.Pop().Data;
                 //currentNode = openedList.Dequeue().Data;
+                currentNode = openedList.Pop().Data;
+                //currentNode = openedList.RemoveFirst().Data;
 
                 // Get all of the Adjacent Nodes to our Current Node
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
@@ -86,6 +91,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
                         //var result = new PathfindingResult(endingPathfindingNode, closedList, openedList.Select(x => x.Data));
                         var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList);
+                        //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList.Select(x => x.Data));
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -101,6 +107,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         int newMovementCost = currentNode.GridNode.MovementCost + baseMovement;
 
                         if (OpenedListContains(openedList, node))
+                        //if (openedList.Contains(node))
                         {
                             if (newMovementCost < node.GridNode.MovementCost)
                             {
@@ -118,15 +125,19 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
                 if (!closedList.ContainsKey(currentNode.GridNode.Key()))
                     closedList[currentNode.GridNode.Key()] = currentNode;
+
+                if (PathInProgress != null)
+                    PathInProgress(this, new PathfindingEventArgs(new PathfindingResult(null, closedList.Values.ToList(), openedList.ToList())));
             }
 
             // Sadly, there is no path to our target so we return null
             return new PathfindingResult(null, closedList.Values, new List<IPathfindingNode>());
         }
 
-        #region Opened/Closed List Helper Methods
+        #region Opened/Closed List Helper Methods 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddToOpenedList(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node, IPathfindingNode endNode)
+        //private void AddToOpenedList(OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
             float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position,
                 node.GridNode.MovementCost + BaseMovementCost,
@@ -134,10 +145,12 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
 
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
-            openedList.Insert(heuristic, node);
+            openedList.Insert(heuristic, node); 
+            //openedList.Add(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));       
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool OpenedListContains(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node)
+        //private bool OpenedListContains(OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node)
         {
             for (int i = 0; i < openedList.Count; i++)
             {

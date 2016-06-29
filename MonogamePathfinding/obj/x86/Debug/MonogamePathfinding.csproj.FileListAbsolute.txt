@@ -24,3 +24,5 @@ C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\bin\Win
 C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\obj\x86\Debug\MonogamePathfinding.csprojResolveAssemblyReference.cache
 C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\obj\x86\Debug\MonogamePathfinding.exe
 C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\obj\x86\Debug\MonogamePathfinding.pdb
+C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\bin\Windows\x86\Debug\PowerCollections.dll
+C:\Users\andre\Documents\GitHub\Monogame-Pathfinding\MonogamePathfinding\bin\Windows\x86\Debug\PowerCollections.xml
