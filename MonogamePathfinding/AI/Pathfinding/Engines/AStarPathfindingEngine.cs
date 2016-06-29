@@ -111,7 +111,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             }
 
             // Sadly, there is no path to our target so we return null
-            return new PathfindingResult(null, closedList, openedList);
+            return new PathfindingResult(null, closedList, new List<IPathfindingNode>());
         }
 
         #region Opened/Closed List Helper Methods
