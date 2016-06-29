@@ -8,31 +8,32 @@ using System.Text;
 using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 
-namespace MonogamePathfinding.AI.Pathfinding
+namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
-    public class AStarPathfindingEngine : IPathfindingEngine
+    public class AStarPathfindingEngine : IHeuristicPathfindingEngine
     {
+        //IPathfindingEngine
         public bool AllowHorizontalVerticalMovement { get; set; }
         public bool AllowDiagonalMovement { get; set; }
+        public IPathfindingGrid Grid { get; }
+        public event EventHandler<PathfindingEventArgs> PathFound;
+
+        //IHeuristicPathfindingEngine
         public int BaseMovementCost { get; set; }
         public int BaseDiagonalMovementCost { get; set; }
-        public IPathfindingGrid Grid { get; }
-
-        public IPathfindingHeuristic HeuristicCalculator { get; set; }
+        public IPathfindingHeuristic Heuristic { get; set; }
 
         public AStarPathfindingEngine(bool allowHorizontalVerticalMovement, int movementCost, bool allowDiagonalMovement, int diagonalMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
         {
             AllowHorizontalVerticalMovement = allowHorizontalVerticalMovement;
-            BaseMovementCost = movementCost;
-
             AllowDiagonalMovement = allowDiagonalMovement;
-            BaseDiagonalMovementCost = diagonalMovementCost;
-
             Grid = grid;
-            HeuristicCalculator = heuristic;
+
+            BaseMovementCost = movementCost;
+            BaseDiagonalMovementCost = diagonalMovementCost;
+            Heuristic = heuristic;
         }
 
-        public event EventHandler<PathfindingEventArgs> PathFound;
         public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
         {
             if (!Grid.WithinGrid(startPosition)) return null;
@@ -54,12 +55,8 @@ namespace MonogamePathfinding.AI.Pathfinding
             // Set up the current node at our starting position
             IPathfindingNode currentNode = startingPathfindingNode;
 
-            bool foundPath = false;
-            while (!foundPath)
+            while (openedList.Count > 0)
             {
-                if (openedList.Count == 0) { break; }
-
-                //List<IPathfindingNode> currentNodeNeighbors = GetAdjacentNodes(currentNode);
                 // Get all of the Adjacent Nodes to our Current Node
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
                 List<IPathfindingNode> currentNodeNeighbors = new List<IPathfindingNode>();
@@ -80,7 +77,7 @@ namespace MonogamePathfinding.AI.Pathfinding
                     {
                         endingPathfindingNode.Parent = currentNode;
 
-                        var result = new PathfindingResult(this, endingPathfindingNode, closedList, openedList.Select(x => x.Data).ToList());
+                        var result = new PathfindingResult(endingPathfindingNode, closedList, openedList.Select(x => x.Data));
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -109,22 +106,19 @@ namespace MonogamePathfinding.AI.Pathfinding
 
                 }
 
-                if (!foundPath)
-                {
-                    AddToClosedList(closedList, currentNode);
-                    currentNode = openedList.Dequeue().Data;
-                }
+                AddToClosedList(closedList, currentNode);
+                currentNode = openedList.Dequeue().Data;
             }
 
             // Sadly, there is no path to our target so we return null
-            return new PathfindingResult(this, null, closedList, new List<IPathfindingNode>());
+            return new PathfindingResult(null, closedList, openedList);
         }
 
         #region Opened/Closed List Helper Methods
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
             openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
-                (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, 
+                (int)Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, 
                 BaseMovementCost + node.GridNode.MovementCost,
                 BaseDiagonalMovementCost + node.GridNode.MovementCost),
                 node));

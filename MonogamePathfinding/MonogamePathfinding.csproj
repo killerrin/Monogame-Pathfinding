@@ -38,7 +38,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AI\Pathfinding\AStarPathfindingEngine.cs" />
+    <Compile Include="AI\Pathfinding\Engines\AStarPathfindingEngine.cs" />
+    <Compile Include="AI\Pathfinding\Engines\IHeuristicPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\Events\PathfindingEventArgs.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\PathfindingGrid.cs" />
@@ -49,7 +50,7 @@
     <Compile Include="AI\Pathfinding\Heuristics\ManhattonDistance.cs" />
     <Compile Include="AI\Pathfinding\Grid\IPathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Grid\IGridNode.cs" />
-    <Compile Include="AI\Pathfinding\IPathfindingEngine.cs" />
+    <Compile Include="AI\Pathfinding\Engines\IPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />

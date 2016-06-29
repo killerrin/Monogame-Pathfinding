@@ -8,15 +8,14 @@ namespace MonogamePathfinding.AI.Pathfinding
 {
     public class PathfindingResult
     {
-        public IPathfindingEngine Engine { get; }
-
         public IPathfindingNode Path { get; }
-        public List<IPathfindingNode> ClosedList { get; }
-        public List<IPathfindingNode> OpenedList { get; }
+        public IEnumerable<IPathfindingNode> ClosedList { get; }
+        public IEnumerable<IPathfindingNode> OpenedList { get; }
 
-        public PathfindingResult(IPathfindingEngine engine, IPathfindingNode path, List<IPathfindingNode> closedList, List<IPathfindingNode> openedList)
+        public PathfindingResult() : this(null) { }
+        public PathfindingResult(IPathfindingNode path) : this(path, new List<IPathfindingNode>(), new List<IPathfindingNode>()) { }
+        public PathfindingResult(IPathfindingNode path, IEnumerable<IPathfindingNode> closedList, IEnumerable<IPathfindingNode> openedList)
         {
-            Engine = engine;
             Path = path;
             ClosedList = closedList;
             OpenedList = openedList;
