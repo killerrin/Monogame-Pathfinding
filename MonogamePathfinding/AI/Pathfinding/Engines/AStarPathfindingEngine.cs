@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -17,7 +18,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public bool AllowHorizontalVerticalMovement { get; set; }
         public bool AllowDiagonalMovement { get; set; }
         public IPathfindingGrid Grid { get; }
-        public event EventHandler<PathfindingEventArgs> PathFound;
+        public event PathfindingEventHandler PathFound;
 
         //IHeuristicPathfindingEngine
         public int BaseMovementCost { get; set; }
@@ -53,11 +54,12 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
             openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
 
-            // Set up the current node at our starting position
-            IPathfindingNode currentNode = startingPathfindingNode;
-
+            // Begin Pathfind
+            IPathfindingNode currentNode = null;
             while (openedList.Count > 0)
             {
+                currentNode = openedList.Dequeue().Data;
+
                 // Get all of the Adjacent Nodes to our Current Node
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
                 List<IPathfindingNode> currentNodeNeighbors = new List<IPathfindingNode>();
@@ -89,7 +91,9 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     if (!ClosedListContains(closedList, node))
                     {
                         node.Parent = currentNode;
-                        int newMovementCost = currentNode.GridNode.MovementCost + BaseMovementCost;
+
+                        var baseMovement = node.GridNode.Position.IsNextTo(currentNode.GridNode.Position) ? BaseMovementCost : BaseDiagonalMovementCost;
+                        int newMovementCost = currentNode.GridNode.MovementCost + baseMovement;
 
                         if (OpenedListContains(openedList, node))
                         {
@@ -108,7 +112,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                 }
 
                 AddToClosedList(closedList, currentNode);
-                currentNode = openedList.Dequeue().Data;
             }
 
             // Sadly, there is no path to our target so we return null
@@ -119,11 +122,12 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
-            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
-                (int)Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, 
-                BaseMovementCost + node.GridNode.MovementCost,
-                BaseDiagonalMovementCost + node.GridNode.MovementCost),
-                node));
+            float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position,
+                node.GridNode.MovementCost + BaseMovementCost,
+                node.GridNode.MovementCost + BaseDiagonalMovementCost);
+            Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
+
+            openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddToClosedList(List<IPathfindingNode> closedList, IPathfindingNode node)

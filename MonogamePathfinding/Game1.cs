@@ -28,6 +28,7 @@ namespace MonogamePathfinding
         public const int GRID_WIDTH = 80;
         public const int GRID_HEIGHT = 80;
         public const int RANDOM_MAZE_VALUE = 43;
+        public const bool GENERATE_MAZE = true;
 
         public IPathfindingEngine PathfindingEngine;
         public IPathfindingGrid Grid;
@@ -113,9 +114,9 @@ namespace MonogamePathfinding
 
             foreach (var cell in entireGrid)
             {
-                Color colour = Color.CornflowerBlue;
+                Color colour = Color.Black;
                 if (cell.Navigatable == TraversalSettings.Unpassable)
-                    colour = Color.Black;
+                    colour = Color.DarkGray;
 
                 spriteBatch.Draw(blankTexture,
                                  new Rectangle(cell.Position.X * GRID_CELL_WIDTH,
@@ -154,7 +155,7 @@ namespace MonogamePathfinding
                                                    currentNode.GridNode.Position.Y * GRID_CELL_HEIGHT,
                                                    GRID_CELL_WIDTH,
                                                    GRID_CELL_HEIGHT),
-                                     Color.White);
+                                     Color.CornflowerBlue);
 
                     currentNode = currentNode.Parent;
                 }
@@ -183,21 +184,29 @@ namespace MonogamePathfinding
             Debug.WriteLine("Resetting Grid");
             Grid = new PathfindingGrid(GRID_WIDTH, GRID_HEIGHT);
             var entireGrid = Grid.GetEntireGrid();
-            foreach (var gridCell in entireGrid)
+
+            if (GENERATE_MAZE)
             {
-                if (gridCell.Position.X == 0 || gridCell.Position.Y == 0 ||
-                    gridCell.Position.X == (Grid.Width - 1) ||
-                    gridCell.Position.Y == (Grid.Height - 1))
+                foreach (var gridCell in entireGrid)
                 {
-                    gridCell.Navigatable = TraversalSettings.Unpassable;
-                }
-                else
-                {
-                    int i = random.Next(0, 50);
-                    if (i < RANDOM_MAZE_VALUE)
-                        gridCell.Navigatable = TraversalSettings.Passable;
-                    else
+                    if (gridCell.Position.X == 0 || gridCell.Position.Y == 0 ||
+                        gridCell.Position.X == (Grid.Width - 1) ||
+                        gridCell.Position.Y == (Grid.Height - 1))
+                    {
                         gridCell.Navigatable = TraversalSettings.Unpassable;
+                    }
+                    else
+                    {
+                        int i = random.Next(0, 50);
+                        if (i < RANDOM_MAZE_VALUE)
+                        {
+                            gridCell.Navigatable = TraversalSettings.Passable;
+                        }
+                        else
+                        {
+                            gridCell.Navigatable = TraversalSettings.Unpassable;
+                        }
+                    }
                 }
             }
 
@@ -242,8 +251,9 @@ namespace MonogamePathfinding
             Debug.WriteLine($"Begin Pathfind");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-
-            PathfindingEngine = new AStarPathfindingEngine(true, 10, true, 14, Grid, new ManhattonDistance());
+        
+            PathfindingEngine = new AStarPathfindingEngine(true, 0, true, 0, Grid, new ManhattonDistance());
+            //PathfindingEngine = new BreadthFirstSearchEngine(true, true, Grid);
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
             stopwatch.Stop();

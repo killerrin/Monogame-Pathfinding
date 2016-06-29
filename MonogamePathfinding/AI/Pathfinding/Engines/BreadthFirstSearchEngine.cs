@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 using MonogamePathfinding.AI.Pathfinding.Grid;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -14,7 +15,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public bool AllowDiagonalMovement { get; set; }
         public bool AllowHorizontalVerticalMovement { get; set; }
         public IPathfindingGrid Grid { get; }
-        public event EventHandler<PathfindingEventArgs> PathFound;
+        public event PathfindingEventHandler PathFound;
 
         public BreadthFirstSearchEngine(bool allowHorizontalVerticalMovement, bool allowDiagonalMovement, IPathfindingGrid grid)
         {
@@ -29,7 +30,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             if (!Grid.WithinGrid(endPosition)) return null;
 
             List<IPathfindingNode> closedList = new List<IPathfindingNode>();
-            Queue<IPathfindingNode> openedList = new Queue<IPathfindingNode>();
+            Queue<IPathfindingNode> openedQueue = new Queue<IPathfindingNode>();
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
@@ -38,34 +39,33 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
-            openedList.Enqueue(startingPathfindingNode);
+            openedQueue.Enqueue(startingPathfindingNode);
 
             IPathfindingNode currentNode = null;
-            while (openedList.Count > 0)
+            while (openedQueue.Count > 0)
             {
-                currentNode = openedList.Dequeue();
+                currentNode = openedQueue.Dequeue();
+                if (ClosedListContains(closedList, currentNode))
+                    continue;
+
+                closedList.Add(currentNode);
+                Debug.WriteLine($"OpenList Count: {openedQueue.Count} | Current Node Position: {currentNode.GridNode.Position}");
 
                 // Get all of the Adjacent Nodes and convert them to pathfinding nodes
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
-                List<IPathfindingNode> currentNodeNeighbors = new List<IPathfindingNode>();
                 foreach (var adjacentGridNode in adjacentGridNodes)
                 {
-                    currentNodeNeighbors.Add(new PathfindingNode(adjacentGridNode, currentNode));
-                }
-
-                // Go through all the adjacentNodes and preform Pathfinding
-                foreach (var node in currentNodeNeighbors)
-                {
                     // Check if the node is passable
-                    if (node.GridNode.Navigatable == TraversalSettings.Unpassable) continue;
+                    if (adjacentGridNode.Navigatable == TraversalSettings.Unpassable) continue;
 
                     // If the ending nodes position is equal to the current node we are searching
                     // parent the end node to the node we are currently iterating through and return
-                    if (endingPathfindingNode.GridNode.Position == node.GridNode.Position)
+                    if (adjacentGridNode.Position == endingPathfindingNode.GridNode.Position)
                     {
+                        Debug.WriteLine("Found Path");
                         endingPathfindingNode.Parent = currentNode;
 
-                        var result = new PathfindingResult(endingPathfindingNode, closedList, openedList);
+                        var result = new PathfindingResult(endingPathfindingNode, closedList, openedQueue);
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -74,14 +74,13 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     }
 
                     // Otherwise, add it to the queue and continue to the next node
-                    if (!ClosedListContains(closedList, node))
-                        openedList.Enqueue(node);
+                    var node = new PathfindingNode(adjacentGridNode, currentNode);
+                    openedQueue.Enqueue(node);
                 }
 
-                closedList.Add(currentNode);
             }
 
-            return new PathfindingResult(null, closedList, openedList);
+            return new PathfindingResult(null, closedList, openedQueue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,6 +91,17 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                 if (closedList[i].GridNode.Position == node.GridNode.Position)
                     return true;
             }
+            return false;
+        }
+
+        private bool OpenedQueueContains(Queue<IPathfindingNode> openedQueue, IPathfindingNode node)
+        {
+            foreach (var openedNode in openedQueue)
+            {
+                if (openedNode.GridNode.Position == node.GridNode.Position)
+                    return true;
+            }
+
             return false;
         }
     }

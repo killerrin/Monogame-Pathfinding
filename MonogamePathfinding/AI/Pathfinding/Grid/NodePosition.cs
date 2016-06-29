@@ -32,6 +32,15 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition SouthEast() => this + new NodePosition(1, 1);
         #endregion
 
+        public bool IsNextTo(NodePosition other)
+        {
+            return Math.Abs(other.X - X) <= 1 && Math.Abs(other.Y - Y) <= 1;
+        }
+        public bool IsDiagonalTo(NodePosition other)
+        {
+            return Math.Abs(other.X - X) == 1 && Math.Abs(other.Y - Y) == 1;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is NodePosition)
