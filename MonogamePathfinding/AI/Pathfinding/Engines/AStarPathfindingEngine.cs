@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using Wintellect.PowerCollections;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -48,7 +47,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
             //PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList = new PriorityQueue<PriorityQueueNode<IPathfindingNode>>();
             BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
-            //OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList = new OrderedSet<PriorityQueueNode<IPathfindingNode>>();
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
@@ -59,7 +57,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
             openedList.Insert(0.0f, startingPathfindingNode);
-            //openedList.Add(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
 
             // Begin Pathfind
             IPathfindingNode currentNode = null;
@@ -67,7 +64,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             {
                 //currentNode = openedList.Dequeue().Data;
                 currentNode = openedList.Pop().Data;
-                //currentNode = openedList.RemoveFirst().Data;
 
                 // Get all of the Adjacent Nodes to our Current Node
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
@@ -91,7 +87,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
                         //var result = new PathfindingResult(endingPathfindingNode, closedList, openedList.Select(x => x.Data));
                         var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList);
-                        //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList.Select(x => x.Data));
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -136,8 +131,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
         #region Opened/Closed List Helper Methods 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         private void AddToOpenedList(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node, IPathfindingNode endNode)
-        //private void AddToOpenedList(OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
             float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position,
                 node.GridNode.MovementCost + BaseMovementCost,
@@ -146,11 +141,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
             openedList.Insert(heuristic, node); 
-            //openedList.Add(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));       
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //private bool OpenedListContains(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node)
         private bool OpenedListContains(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node)
-        //private bool OpenedListContains(OrderedSet<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node)
         {
             for (int i = 0; i < openedList.Count; i++)
             {

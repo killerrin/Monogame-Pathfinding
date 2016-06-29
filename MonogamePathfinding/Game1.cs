@@ -19,12 +19,7 @@ namespace MonogamePathfinding
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
-        Random random = new Random();
-        InputListenerManager _inputManager;
-        Texture2D blankTexture;
+        public const bool PERF_TEST = true; // Disables Async and PathInProgress
 
         public const int GRID_CELL_PIXEL_WIDTH = 8;
         public const int GRID_CELL_PIXEL_HEIGHT = 8;
@@ -32,6 +27,13 @@ namespace MonogamePathfinding
         public const int GRID_HEIGHT = 100;
         public const int RANDOM_MAZE_VALUE = 44; // Higher is Less Dense
         public const bool GENERATE_MAZE = true;
+
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        Random random = new Random();
+        InputListenerManager _inputManager;
+        Texture2D blankTexture;
 
         public IPathfindingEngine PathfindingEngine;
         public IPathfindingGrid Grid;
@@ -258,21 +260,32 @@ namespace MonogamePathfinding
         private void Pathfind()
         {
             Path = null;
+            if (PathfindingEngine == null)
+                SetPathfindingEngine(0);
 
-            Task.Run(() =>
+            if (PERF_TEST)
             {
-                if (PathfindingEngine == null)
-                    SetPathfindingEngine(0);
+                PerfPathFind();
+            }
+            else
+            {
+                Task.Run(() =>
+                {
+                    PerfPathFind();
+                });
+            }
+        }
 
-                Debug.WriteLine($"Begin Pathfind");
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
+        private void PerfPathFind()
+        {
+            Debug.WriteLine($"Begin Pathfind");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-                var path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
+            var path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
-                stopwatch.Stop();
-                Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms, {stopwatch.Elapsed.TotalSeconds}s | Path Found: {path.Path != null} | Total Searched Nodes:{((ICollection)path.ClosedList).Count}");
-            });
+            stopwatch.Stop();
+            Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms, {stopwatch.Elapsed.TotalSeconds}s | Path Found: {path.Path != null} | Total Searched Nodes:{((ICollection)path.ClosedList).Count}");
         }
 
         private void SetPathfindingEngine(int id)
@@ -289,7 +302,9 @@ namespace MonogamePathfinding
             }
 
             PathfindingEngine.PathFound += PathfindingEngine_PathFound;
-            PathfindingEngine.PathInProgress += PathfindingEngine_PathInProgress;
+
+            if (!PERF_TEST)
+                PathfindingEngine.PathInProgress += PathfindingEngine_PathInProgress;
         }
 
         private void PathfindingEngine_PathInProgress(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)
