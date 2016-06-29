@@ -17,16 +17,13 @@ namespace MonogamePathfinding.Collections
             Data = data;
         }
 
-        public override string ToString()
-        {
-            return "Priority: " + Priority;
-        }
-
         public int CompareTo(PriorityQueueNode<T> other)
         {
             if (Priority < other.Priority) return -1;
             else if (Priority > other.Priority) return 1;
             else return 0;
         }
+
+        public override string ToString() => $"Priority: {Priority}";
     }
 }
