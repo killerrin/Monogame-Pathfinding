@@ -58,7 +58,10 @@
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />
     <Compile Include="AI\Pathfinding\PathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\PathfindingResult.cs" />
+    <Compile Include="Collections\BinaryHeap.cs" />
+    <Compile Include="Collections\IPriorityQueueNode.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\BinaryHeapNode.cs" />
     <Compile Include="Collections\PriorityQueueNode.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
