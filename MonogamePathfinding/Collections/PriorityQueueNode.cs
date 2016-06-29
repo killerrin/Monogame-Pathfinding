@@ -21,7 +21,7 @@ namespace MonogamePathfinding.Collections
         {
             if (Priority < other.Priority) return -1;
             else if (Priority > other.Priority) return 1;
-            else return 0;
+            return 0;
         }
 
         public override string ToString() => $"Priority: {Priority}";
