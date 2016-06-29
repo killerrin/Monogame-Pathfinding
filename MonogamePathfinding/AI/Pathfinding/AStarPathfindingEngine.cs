@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonogamePathfinding.AI.Pathfinding.Events;
 
 namespace MonogamePathfinding.AI.Pathfinding
 {
     public class AStarPathfindingEngine : IPathfindingEngine
     {
+        public bool AllowHorizontalVerticalMovement { get; set; }
         public bool AllowDiagonalMovement { get; set; }
         public int BaseMovementCost { get; set; }
         public int BaseDiagonalMovementCost { get; set; }
@@ -18,14 +20,19 @@ namespace MonogamePathfinding.AI.Pathfinding
 
         public IPathfindingHeuristic HeuristicCalculator { get; set; }
 
-        public AStarPathfindingEngine(bool allowDiagonalMovement, int movementCost, int diagonalMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
+        public AStarPathfindingEngine(bool allowHorizontalVerticalMovement, int movementCost, bool allowDiagonalMovement, int diagonalMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
         {
+            AllowHorizontalVerticalMovement = allowHorizontalVerticalMovement;
             BaseMovementCost = movementCost;
+
+            AllowDiagonalMovement = allowDiagonalMovement;
             BaseDiagonalMovementCost = diagonalMovementCost;
+
             Grid = grid;
             HeuristicCalculator = heuristic;
         }
 
+        public event EventHandler<PathfindingEventArgs> PathFound;
         public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
         {
             if (!Grid.WithinGrid(startPosition)) return null;
@@ -52,7 +59,16 @@ namespace MonogamePathfinding.AI.Pathfinding
             {
                 if (openedList.Count == 0) { break; }
 
-                List<IPathfindingNode> currentNodeNeighbors = GetAdjacentNodes(currentNode);
+                //List<IPathfindingNode> currentNodeNeighbors = GetAdjacentNodes(currentNode);
+                // Get all of the Adjacent Nodes to our Current Node
+                var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
+                List<IPathfindingNode> currentNodeNeighbors = new List<IPathfindingNode>();
+                foreach (var adjacentGridNode in adjacentGridNodes)
+                {
+                    currentNodeNeighbors.Add(new PathfindingNode(adjacentGridNode, currentNode));
+                }
+
+                // Go through all the adjacentNodes and preform Pathfinding
                 foreach (var node in currentNodeNeighbors)
                 {
                     // Check if the node is passable
@@ -63,7 +79,13 @@ namespace MonogamePathfinding.AI.Pathfinding
                     if (endingPathfindingNode.GridNode.Position == node.GridNode.Position)
                     {
                         endingPathfindingNode.Parent = currentNode;
-                        return new PathfindingResult(this, endingPathfindingNode, closedList, openedList.Select(x => x.Data).ToList());
+
+                        var result = new PathfindingResult(this, endingPathfindingNode, closedList, openedList.Select(x => x.Data).ToList());
+
+                        if (PathFound != null)
+                            PathFound(this, new PathfindingEventArgs(result));
+
+                        return result;
                     }
 
                     if (!ClosedListContains(closedList, node))
@@ -98,44 +120,9 @@ namespace MonogamePathfinding.AI.Pathfinding
             return new PathfindingResult(this, null, closedList, new List<IPathfindingNode>());
         }
 
-        private List<IPathfindingNode> GetAdjacentNodes(IPathfindingNode centerNode)
-        {
-            // Using the helper methods, grab all of the nodes from each direction
-            List<NodePosition> positions = new List<NodePosition>();
-            positions.Add(centerNode.GridNode.Position.North());
-            positions.Add(centerNode.GridNode.Position.South());
-            positions.Add(centerNode.GridNode.Position.East());
-            positions.Add(centerNode.GridNode.Position.West());
-
-            if (AllowDiagonalMovement)
-            {
-                positions.Add(centerNode.GridNode.Position.NorthEast());
-                positions.Add(centerNode.GridNode.Position.SouthEast());
-                positions.Add(centerNode.GridNode.Position.NorthWest());
-                positions.Add(centerNode.GridNode.Position.SouthWest());
-            }
-
-            // Remove all of the positions not currently within the grid
-            for (int i = positions.Count - 1; i >= 0; i--)
-            {
-                if (!Grid.WithinGrid(positions[i]))
-                    positions.RemoveAt(i);
-            }
-
-            // Finally, convert all of the positions into Grid Nodes and return
-            List<IPathfindingNode> nodes = new List<IPathfindingNode>();
-            foreach (var pos in positions)
-            {
-                nodes.Add(new PathfindingNode(Grid.FindNode(pos), centerNode));
-            }
-
-            return nodes;
-        }
-
         #region Opened/Closed List Helper Methods
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
-
             openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
                 (int)HeuristicCalculator.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position, 
                 BaseMovementCost + node.GridNode.MovementCost,

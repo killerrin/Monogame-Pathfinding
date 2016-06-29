@@ -80,5 +80,37 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
 
             return nodes;
         }
+
+        public IList<IGridNode> GetAdjacentNodes(NodePosition centerNode, bool allowHorizontalVertical, bool allowDiagonal)
+        {
+            // Using the helper methods, grab all of the nodes from each direction
+            List<NodePosition> positions = new List<NodePosition>();
+
+            if (allowHorizontalVertical)
+            {
+                positions.Add(centerNode.North());
+                positions.Add(centerNode.South());
+                positions.Add(centerNode.East());
+                positions.Add(centerNode.West());
+            }
+            if (allowDiagonal)
+            {
+                positions.Add(centerNode.NorthEast());
+                positions.Add(centerNode.SouthEast());
+                positions.Add(centerNode.NorthWest());
+                positions.Add(centerNode.SouthWest());
+            }
+
+            // Finally, convert all those positions to GridNodes and return them
+            List<IGridNode> adjacentNodes = new List<IGridNode>();
+            foreach (var position in positions)
+            {
+                var node = FindNode(position);
+                if (node != null)
+                    adjacentNodes.Add(node);
+            }
+
+            return adjacentNodes;
+        }
     }
 }

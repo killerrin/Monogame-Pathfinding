@@ -200,9 +200,6 @@ namespace MonogamePathfinding
                 }
             }
 
-            foreach (var cell in entireGrid)
-                cell.Navigatable = TraversalSettings.Passable;
-
             RandomizeStartEndPositions();
         }
 
@@ -245,7 +242,7 @@ namespace MonogamePathfinding
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            PathfindingEngine = new AStarPathfindingEngine(true, 10, 10, Grid, new DiagonalDistance());
+            PathfindingEngine = new AStarPathfindingEngine(true, 10, true, 14, Grid, new ManhattonDistance());
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
             stopwatch.Stop();

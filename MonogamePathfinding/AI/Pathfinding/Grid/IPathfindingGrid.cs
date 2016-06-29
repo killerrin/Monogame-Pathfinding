@@ -20,5 +20,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         IList<IGridNode> GetEntireGrid();
         IList<IGridNode> GetXColumn(int column);
         IList<IGridNode> GetYRow(int row);
+
+        IList<IGridNode> GetAdjacentNodes(NodePosition centerNode, bool allowHorizontalVertical, bool allowDiagonal);
     }
 }
