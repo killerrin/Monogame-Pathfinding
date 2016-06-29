@@ -137,6 +137,7 @@ namespace MonogamePathfinding
             }
             foreach (var cell in Path.OpenedList)
             {
+                if (cell == null) continue;
                 spriteBatch.Draw(blankTexture,
                                  new Rectangle(cell.GridNode.Position.X * GRID_CELL_WIDTH,
                                                cell.GridNode.Position.Y * GRID_CELL_HEIGHT,
@@ -252,7 +253,7 @@ namespace MonogamePathfinding
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
         
-            PathfindingEngine = new AStarPathfindingEngine(true, 0, true, 0, Grid, new ManhattonDistance());
+            PathfindingEngine = new AStarPathfindingEngine(true, 10, false, 14, Grid, new ManhattonDistance());
             //PathfindingEngine = new BreadthFirstSearchEngine(true, true, Grid);
             Path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
 
