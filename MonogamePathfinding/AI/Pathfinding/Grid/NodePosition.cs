@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,17 +19,17 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         }
 
         #region Directions
-        public NodePosition North() => this + new NodePosition(0, -1);
-        public NodePosition South() => this + new NodePosition(0, 1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition North() => this + new NodePosition(0, -1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition South() => this + new NodePosition(0, 1);
 
-        public NodePosition West() => this + new NodePosition(-1, 0);
-        public NodePosition East() => this + new NodePosition(1, 0);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition West() => this + new NodePosition(-1, 0);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition East() => this + new NodePosition(1, 0);
 
-        public NodePosition NorthWest() => this + new NodePosition(-1, -1);
-        public NodePosition NorthEast() => this + new NodePosition(1, -1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition NorthWest() => this + new NodePosition(-1, -1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition NorthEast() => this + new NodePosition(1, -1);
 
-        public NodePosition SouthWest() => this + new NodePosition(-1, 1);
-        public NodePosition SouthEast() => this + new NodePosition(1, 1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition SouthWest() => this + new NodePosition(-1, 1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NodePosition SouthEast() => this + new NodePosition(1, 1);
         #endregion
 
         public override bool Equals(object obj)

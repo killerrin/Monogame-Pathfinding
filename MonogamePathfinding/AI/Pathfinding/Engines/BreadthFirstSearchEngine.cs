@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
 using MonogamePathfinding.AI.Pathfinding.Grid;
+using System.Runtime.CompilerServices;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -83,6 +84,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             return new PathfindingResult(null, closedList, openedList);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool ClosedListContains(List<IPathfindingNode> closedList, IPathfindingNode node)
         {
             for (int i = 0; i < closedList.Count; i++)

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
+using System.Runtime.CompilerServices;
 
 namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
@@ -115,6 +116,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         }
 
         #region Opened/Closed List Helper Methods
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
         {
             openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(
@@ -123,12 +125,13 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                 BaseDiagonalMovementCost + node.GridNode.MovementCost),
                 node));
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddToClosedList(List<IPathfindingNode> closedList, IPathfindingNode node)
         {
             if (!ClosedListContains(closedList, node))
                 closedList.Add(node);
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool OpenedListContains(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node)
         {
             for (int i = 0; i < openedList.Count; i++)
@@ -138,6 +141,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             }
             return false;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool ClosedListContains(List<IPathfindingNode> closedList, IPathfindingNode node)
         {
             for (int i = 0; i < closedList.Count; i++)
