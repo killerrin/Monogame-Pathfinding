@@ -130,9 +130,10 @@ namespace MonogamePathfinding.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var item in _data)
+            for (int i = 0; i < _data.Length; i++)
             {
-                yield return item.Data;
+                if (_data[i] == null) continue;
+                yield return _data[i].Data;
             }
         }
 
