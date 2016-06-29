@@ -52,7 +52,7 @@
     <Compile Include="AI\Pathfinding\Grid\IPathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Grid\IGridNode.cs" />
     <Compile Include="AI\Pathfinding\Engines\IPathfindingEngine.cs" />
-    <Compile Include="AI\Pathfinding\PathfindingExtensions.cs" />
+    <Compile Include="AI\Pathfinding\PathfindingNodeExtensions.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />

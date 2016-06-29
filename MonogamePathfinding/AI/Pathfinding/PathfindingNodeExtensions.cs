@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonogamePathfinding.AI.Pathfinding
 {
-    public static class PathfindingExtensions
+    public static class PathfindingNodeExtensions
     {
         public static IPathfindingNode Reverse(this IPathfindingNode root)
         {

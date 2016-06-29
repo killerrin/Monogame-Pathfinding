@@ -25,12 +25,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         }
 
         private readonly object m_lockObject = new object();
-        public GridNode(NodePosition position)
-        {
-            Position = position;
-            MovementCost = 10;
-            Navigatable = TraversalSettings.Passable;
-        }
+        public GridNode(NodePosition position) : this(position, 10, TraversalSettings.Passable) { }
         public GridNode(NodePosition position, int movementCost, TraversalSettings traversable)
         {
             Position = position;

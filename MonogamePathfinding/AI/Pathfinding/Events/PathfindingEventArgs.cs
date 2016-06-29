@@ -11,8 +11,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Events
     public class PathfindingEventArgs : EventArgs
     {
         public PathfindingResult Result { get; }
-        public PathfindingEventArgs(PathfindingResult result)
-            :base()
+        public PathfindingEventArgs(PathfindingResult result) : base()
         {
             Result = result;
         }
