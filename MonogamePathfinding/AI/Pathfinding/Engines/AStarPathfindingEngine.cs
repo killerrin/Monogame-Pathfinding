@@ -71,7 +71,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             {
                 //currentNode = openedList.Dequeue().Data;
                 currentNode = openedList.Pop().Data;
-                //currentNode = openedList.Dequeue().Data;
                 quickSearchOpenedList.Remove(currentNode.GridNode.Key());
 
                 // Get all of the Adjacent Nodes to our Current Node
@@ -94,15 +93,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     {
                         endingPathfindingNode.Parent = currentNode;
 
-                        //var result = new PathfindingResult(endingPathfindingNode, closedList, openedList.Select(x => x.Data));
-                        //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList);
-                        //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList.Select(x => x.Node));
-
                         var result = new PathfindingResult(endingPathfindingNode, closedList.Values, quickSearchOpenedList.Values);
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
-
                         return result;
                     }
 
@@ -124,7 +118,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         {
                             node.GridNode.MovementCost = newMovementCost;
                             
-                            //AddToOpenedList(quickSearchOpenedList, openedList, node, endingPathfindingNode);
                             float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endingPathfindingNode.GridNode.Position,
                                 node.GridNode.MovementCost + BaseMovementCost,
                                 node.GridNode.MovementCost + BaseDiagonalMovementCost);
@@ -143,10 +136,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     closedList[currentNode.GridNode.Key()] = currentNode;
 
                 if (PathInProgress != null)
-                {
-                    PathInProgress(this, new PathfindingEventArgs(new PathfindingResult(null, closedList.Values.ToList(), openedList.ToList())));
-                    //PathInProgress(this, new PathfindingEventArgs(new PathfindingResult(null, closedList.Values.ToList(), openedList.Select(x => x.Node))));
-                }
+                    PathInProgress(this, new PathfindingEventArgs(new PathfindingResult(null, closedList.Values.ToList(), quickSearchOpenedList.Values.ToList())));
             }
 
             // Sadly, there is no path to our target so we return null
