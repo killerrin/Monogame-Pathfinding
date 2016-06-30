@@ -19,7 +19,7 @@ namespace MonogamePathfinding
     /// </summary>
     public class Game1 : Game
     {
-        public const bool PERF_TEST = true; // Disables Async and PathInProgress
+        public const bool PERF_TEST = false; // Disables Async and PathInProgress
 
         public const int GRID_CELL_PIXEL_WIDTH = 8;
         public const int GRID_CELL_PIXEL_HEIGHT = 8;

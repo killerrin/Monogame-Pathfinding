@@ -45,6 +45,7 @@
     <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNodeExtensions.cs" />
     <Compile Include="AI\Pathfinding\Grid\PathfindingGrid.cs" />
+    <Compile Include="AI\Pathfinding\Grid\PathfindingGridExtensions.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\DiagonalDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanSquaredDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanDistance.cs" />
@@ -64,6 +65,13 @@
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\BinaryHeapNode.cs" />
     <Compile Include="Collections\PriorityQueueNode.cs" />
+    <Compile Include="Collections\PriorityQueue\FastPriorityQueue.cs" />
+    <Compile Include="Collections\PriorityQueue\FastPriorityQueueNode.cs" />
+    <Compile Include="Collections\PriorityQueue\IFixedSizePriorityQueue.cs" />
+    <Compile Include="Collections\PriorityQueue\IPriorityQueue.cs" />
+    <Compile Include="Collections\PriorityQueue\SimplePriorityQueue.cs" />
+    <Compile Include="Collections\PriorityQueue\StablePriorityQueue.cs" />
+    <Compile Include="Collections\PriorityQueue\StablePriorityQueueNode.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Collections\PriorityQueue\License.txt" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,25 @@
+A* Pathfinding
+
+Priority Queue (Heap)
+Total Time: 354ms, 0.3547465s | Path Found: True | Total Searched Nodes:1106
+Total Time: 279ms, 0.2797455s | Path Found: True | Total Searched Nodes:1098
+Total Time: 214ms, 0.2148415s | Path Found: True | Total Searched Nodes:800
+Total Time: 210ms, 0.2104818s | Path Found: True | Total Searched Nodes:758
+Total Time: 235ms, 0.2350883s | Path Found: True | Total Searched Nodes:752
+Total Time: 188ms, 0.1887837s | Path Found: True | Total Searched Nodes:694
+
+Binary Heap
+Total Time: 249ms, 0.24943s | Path Found: True | Total Searched Nodes:937
+Total Time: 271ms, 0.2716783s | Path Found: True | Total Searched Nodes:889
+Total Time: 243ms, 0.243895s | Path Found: True | Total Searched Nodes:846
+Total Time: 238ms, 0.2386864s | Path Found: True | Total Searched Nodes:840
+Total Time: 217ms, 0.2179546s | Path Found: True | Total Searched Nodes:756
+Total Time: 195ms, 0.195907s | Path Found: True | Total Searched Nodes:706
+
+Priority Queue (Priority Queue Folder
+Total Time: 365ms, 0.3651749s | Path Found: True | Total Searched Nodes:1245
+Total Time: 443ms, 0.4433752s | Path Found: True | Total Searched Nodes:991
+Total Time: 280ms, 0.2801817s | Path Found: True | Total Searched Nodes:893
+Total Time: 255ms, 0.2553824s | Path Found: True | Total Searched Nodes:854
+Total Time: 259ms, 0.2593234s | Path Found: True | Total Searched Nodes:800
+Total Time: 249ms, 0.2492401s | Path Found: True | Total Searched Nodes:571
