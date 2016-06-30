@@ -49,8 +49,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             Dictionary<UInt64, IPathfindingNode> quickSearchOpenedList = new Dictionary<ulong, IPathfindingNode>();
 
             //PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList = new PriorityQueue<PriorityQueueNode<IPathfindingNode>>();
-            BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
             //FastPriorityQueue<PriorityPathfindingNode> openedList = new FastPriorityQueue<PriorityPathfindingNode>(Grid.Width * Grid.Height);
+            BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
@@ -60,10 +60,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             IGridNode startingGridNode = Grid.FindNode(startPosition);
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
 
-            quickSearchOpenedList[startingPathfindingNode.GridNode.Key()] = startingPathfindingNode;
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
-            openedList.Insert(0.0f, startingPathfindingNode);
             //openedList.Enqueue(new PriorityPathfindingNode(startingPathfindingNode), 0.0f);
+            openedList.Insert(0.0f, startingPathfindingNode);
+            quickSearchOpenedList[startingPathfindingNode.GridNode.Key()] = startingPathfindingNode;
 
             // Begin Pathfind
             IPathfindingNode currentNode = null;
@@ -124,9 +124,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                             Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
 
                             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
-                            openedList.Insert(heuristic, node);
                             //openedList.Enqueue(new PriorityPathfindingNode(node), heuristic);
-
+                            openedList.Insert(heuristic, node);
                             quickSearchOpenedList[node.GridNode.Key()] = node;
                         }
                     }

@@ -16,6 +16,15 @@ Total Time: 238ms, 0.2386864s | Path Found: True | Total Searched Nodes:840
 Total Time: 217ms, 0.2179546s | Path Found: True | Total Searched Nodes:756
 Total Time: 195ms, 0.195907s | Path Found: True | Total Searched Nodes:706
 
+Binary Heap (w/ Dictionary Cache)
+Total Time: 254ms, 0.2541363s | Path Found: True | Total Searched Nodes:1176
+Total Time: 243ms, 0.2430154s | Path Found: True | Total Searched Nodes:1031
+Total Time: 213ms, 0.2133519s | Path Found: True | Total Searched Nodes:940
+Total Time: 223ms, 0.2236523s | Path Found: True | Total Searched Nodes:857
+Total Time: 186ms, 0.1868129s | Path Found: True | Total Searched Nodes:803
+Total Time: 191ms, 0.1919671s | Path Found: True | Total Searched Nodes:749
+Total Time: 167ms, 0.1675363s | Path Found: True | Total Searched Nodes:675
+
 Priority Queue (Priority Queue Folder
 Total Time: 365ms, 0.3651749s | Path Found: True | Total Searched Nodes:1245
 Total Time: 443ms, 0.4433752s | Path Found: True | Total Searched Nodes:991
