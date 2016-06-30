@@ -46,6 +46,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
             // Create the opened and closed lists
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
+            Dictionary<UInt64, IPathfindingNode> quickSearchOpenedList = new Dictionary<ulong, IPathfindingNode>();
+
             //PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList = new PriorityQueue<PriorityQueueNode<IPathfindingNode>>();
             BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
             //FastPriorityQueue<PriorityPathfindingNode> openedList = new FastPriorityQueue<PriorityPathfindingNode>(Grid.Width * Grid.Height);
@@ -57,6 +59,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
             IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
+
+            quickSearchOpenedList[startingPathfindingNode.GridNode.Key()] = startingPathfindingNode;
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
             openedList.Insert(0.0f, startingPathfindingNode);
             //openedList.Enqueue(new PriorityPathfindingNode(startingPathfindingNode), 0.0f);
@@ -68,6 +72,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                 //currentNode = openedList.Dequeue().Data;
                 currentNode = openedList.Pop().Data;
                 //currentNode = openedList.Dequeue().Data;
+                quickSearchOpenedList.Remove(currentNode.GridNode.Key());
 
                 // Get all of the Adjacent Nodes to our Current Node
                 var adjacentGridNodes = Grid.GetAdjacentNodes(currentNode.GridNode.Position, AllowHorizontalVerticalMovement, AllowDiagonalMovement);
@@ -90,8 +95,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         endingPathfindingNode.Parent = currentNode;
 
                         //var result = new PathfindingResult(endingPathfindingNode, closedList, openedList.Select(x => x.Data));
-                        var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList);
+                        //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList);
                         //var result = new PathfindingResult(endingPathfindingNode, closedList.Values, openedList.Select(x => x.Node));
+
+                        var result = new PathfindingResult(endingPathfindingNode, closedList.Values, quickSearchOpenedList.Values);
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
@@ -106,8 +113,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         var baseMovement = node.GridNode.Position.IsNextTo(currentNode.GridNode.Position) ? BaseMovementCost : BaseDiagonalMovementCost;
                         int newMovementCost = currentNode.GridNode.MovementCost + baseMovement;
 
-                        //if (openedList.Contains(node))
-                        if (OpenedListContains(openedList, node))
+                        if (quickSearchOpenedList.ContainsKey(node.GridNode.Key()))
                         {
                             if (newMovementCost < node.GridNode.MovementCost)
                             {
@@ -117,10 +123,20 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         else
                         {
                             node.GridNode.MovementCost = newMovementCost;
-                            AddToOpenedList(openedList, node, endingPathfindingNode);
+                            
+                            //AddToOpenedList(quickSearchOpenedList, openedList, node, endingPathfindingNode);
+                            float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endingPathfindingNode.GridNode.Position,
+                                node.GridNode.MovementCost + BaseMovementCost,
+                                node.GridNode.MovementCost + BaseDiagonalMovementCost);
+                            Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
+
+                            //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
+                            openedList.Insert(heuristic, node);
+                            //openedList.Enqueue(new PriorityPathfindingNode(node), heuristic);
+
+                            quickSearchOpenedList[node.GridNode.Key()] = node;
                         }
                     }
-
                 }
 
                 if (!closedList.ContainsKey(currentNode.GridNode.Key()))
@@ -136,43 +152,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             // Sadly, there is no path to our target so we return null
             return new PathfindingResult(null, closedList.Values, new List<IPathfindingNode>());
         }
-
-        #region Opened/Closed List Helper Methods 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //private void AddToOpenedList(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node, IPathfindingNode endNode)
-        private void AddToOpenedList(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node, IPathfindingNode endNode)
-        //private void AddToOpenedList(FastPriorityQueue<PriorityPathfindingNode> openedList, IPathfindingNode node, IPathfindingNode endNode)
-        {
-            float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endNode.GridNode.Position,
-                node.GridNode.MovementCost + BaseMovementCost,
-                node.GridNode.MovementCost + BaseDiagonalMovementCost);
-            Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
-
-            //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
-            openedList.Insert(heuristic, node); 
-            //openedList.Enqueue(new PriorityPathfindingNode(node), heuristic);
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //private bool OpenedListContains(PriorityQueue<PriorityQueueNode<IPathfindingNode>> openedList, IPathfindingNode node)
-        private bool OpenedListContains(BinaryHeap<float, IPathfindingNode> openedList, IPathfindingNode node)
-        //private bool OpenedListContains(FastPriorityQueue<PriorityPathfindingNode> openedList, IPathfindingNode node)
-        {
-            //for (int i = 0; i < openedList.Count; i++)
-            //{
-            //    if (openedList[i] == null) continue;
-            //    if (openedList[i].Data.GridNode.Position == node.GridNode.Position)
-            //        return true;
-            //}
-
-            foreach (var listNode in openedList)
-            {
-                if (listNode == null) continue;
-                if (listNode.GridNode.Position == node.GridNode.Position)
-                    return true;
-            }
-            return false;
-        }
-        #endregion
     }
 
     public class PriorityPathfindingNode : FastPriorityQueueNode
