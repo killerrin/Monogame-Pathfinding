@@ -105,23 +105,26 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         node.Parent = currentNode;
 
                         var baseMovement = node.GridNode.Position.IsNextTo(currentNode.GridNode.Position) ? BaseMovementCost : BaseDiagonalMovementCost;
-                        int newMovementCost = currentNode.GridNode.MovementCost + baseMovement;
+                        int newMovementCost = currentNode.TotalMovementCost + currentNode.GridNode.MovementCost + baseMovement;
 
                         if (quickSearchOpenedList.ContainsKey(node.GridNode.Key()))
                         {
-                            if (newMovementCost < node.GridNode.MovementCost)
+                            //if (newMovementCost < node.GridNode.MovementCost)
+                            if (newMovementCost < node.TotalMovementCost)
                             {
-                                node.GridNode.MovementCost = newMovementCost;
+                                //node.GridNode.MovementCost = newMovementCost;
+                                node.TotalMovementCost = newMovementCost;
                             }
                         }
                         else
                         {
-                            node.GridNode.MovementCost = newMovementCost;
-                            
+                            //node.GridNode.MovementCost = newMovementCost;
+                            node.TotalMovementCost = newMovementCost;
+
                             float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endingPathfindingNode.GridNode.Position,
                                 node.GridNode.MovementCost + BaseMovementCost,
                                 node.GridNode.MovementCost + BaseDiagonalMovementCost);
-                            Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
+                            //Debug.WriteLine($"Heuristic: {heuristic} | MovementCost: {node.GridNode.MovementCost} | BaseMovement: {BaseMovementCost} | DiagonalMovement: {BaseDiagonalMovementCost}");
 
                             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>((int)heuristic, node));
                             //openedList.Enqueue(new PriorityPathfindingNode(node), heuristic);
