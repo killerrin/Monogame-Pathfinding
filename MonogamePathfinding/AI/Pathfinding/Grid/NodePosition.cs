@@ -56,7 +56,17 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         public static NodePosition operator +(NodePosition one, NodePosition two) => new NodePosition(one.X + two.X, one.Y + two.Y);
         public static NodePosition operator -(NodePosition one, NodePosition two) => new NodePosition(one.X - two.X, one.Y - two.Y);
 
-        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
+        public override int GetHashCode() //=> X.GetHashCode() ^ Y.GetHashCode();
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                // Suitable nullity checks etc, of course :)
+                hash = hash * 23 + X.GetHashCode();
+                hash = hash * 23 + Y.GetHashCode();
+                return hash;
+            }
+        }
         public override string ToString() => $"{X}, {Y}";
     }
 }

@@ -117,6 +117,7 @@ namespace MonogamePathfinding
             var entireGrid = Grid.GetEntireGrid();
             spriteBatch.Begin();
 
+            // Draw the Grid
             foreach (var cell in entireGrid)
             {
                 Color colour = Color.Black;
@@ -133,6 +134,7 @@ namespace MonogamePathfinding
 
             if (Path != null)
             {
+                // Draw the Closed List, Opened Lists
                 foreach (var cell in Path.ClosedList)
                 {
                     spriteBatch.Draw(blankTexture,
@@ -153,6 +155,7 @@ namespace MonogamePathfinding
                                      Color.Yellow);
                 }
 
+                // Draw the Path
                 IPathfindingNode currentNode = Path.Path;
                 while (currentNode != null)
                 {
@@ -165,20 +168,22 @@ namespace MonogamePathfinding
 
                     currentNode = currentNode.Parent;
                 }
-
-                spriteBatch.Draw(blankTexture,
-                                 new Rectangle(StartGridCell.Position.X * GRID_CELL_PIXEL_WIDTH,
-                                               StartGridCell.Position.Y * GRID_CELL_PIXEL_HEIGHT,
-                                               GRID_CELL_PIXEL_WIDTH,
-                                               GRID_CELL_PIXEL_HEIGHT),
-                                 Color.Green);
-                spriteBatch.Draw(blankTexture,
-                                 new Rectangle(EndGridCell.Position.X * GRID_CELL_PIXEL_WIDTH,
-                                               EndGridCell.Position.Y * GRID_CELL_PIXEL_HEIGHT,
-                                               GRID_CELL_PIXEL_WIDTH,
-                                               GRID_CELL_PIXEL_HEIGHT),
-                                 Color.Red);
             }
+
+            // Draw the Start and End Positions
+            spriteBatch.Draw(blankTexture,
+                 new Rectangle(StartGridCell.Position.X * GRID_CELL_PIXEL_WIDTH,
+                               StartGridCell.Position.Y * GRID_CELL_PIXEL_HEIGHT,
+                               GRID_CELL_PIXEL_WIDTH,
+                               GRID_CELL_PIXEL_HEIGHT),
+                 Color.Green);
+            spriteBatch.Draw(blankTexture,
+                             new Rectangle(EndGridCell.Position.X * GRID_CELL_PIXEL_WIDTH,
+                                           EndGridCell.Position.Y * GRID_CELL_PIXEL_HEIGHT,
+                                           GRID_CELL_PIXEL_WIDTH,
+                                           GRID_CELL_PIXEL_HEIGHT),
+                             Color.Red);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
