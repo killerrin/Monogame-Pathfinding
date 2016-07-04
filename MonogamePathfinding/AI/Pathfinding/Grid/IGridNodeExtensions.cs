@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonogamePathfinding.AI.Pathfinding.Grid
 {
-    public static class GridNodeExtensions
+    public static class IGridNodeExtensions
     {
         public static UInt64 Key(this IGridNode node)
         {
