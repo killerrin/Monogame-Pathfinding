@@ -52,7 +52,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return true;
         }
 
-        public IList<IGridNode> GetEntireGrid()
+        public IReadOnlyCollection<IGridNode> GetEntireGrid()
         {
             List<IGridNode> nodes = new List<IGridNode>();
             for (int x = 0; x < Width; x++)
@@ -63,7 +63,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return nodes;
         }
 
-        public IList<IGridNode> GetXColumn(int column)
+        public IReadOnlyCollection<IGridNode> GetXColumn(int column)
         {
             List<IGridNode> nodes = new List<IGridNode>();
             for (int y = 0; y < Height; y++)
@@ -74,7 +74,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return nodes;
         }
 
-        public IList<IGridNode> GetYRow(int row)
+        public IReadOnlyCollection<IGridNode> GetYRow(int row)
         {
             List<IGridNode> nodes = new List<IGridNode>();
             for (int x = 0; x < Width; x++)
@@ -85,7 +85,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return nodes;
         }
 
-        public IList<IGridNode> GetAdjacentNodes(NodePosition centerNode, bool allowHorizontalVertical, bool allowDiagonal)
+        public IReadOnlyCollection<IGridNode> GetAdjacentNodes(NodePosition centerNode, bool allowHorizontalVertical, bool allowDiagonal)
         {
             // Using the helper methods, grab all of the nodes from each direction
             List<NodePosition> positions = new List<NodePosition>();

@@ -7,6 +7,7 @@ using MonogamePathfinding.AI.Pathfinding.Engines;
 using MonogamePathfinding.AI.Pathfinding.Grid;
 using MonogamePathfinding.AI.Pathfinding.Heuristics;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -238,7 +239,7 @@ namespace MonogamePathfinding
             //Debug.WriteLine("While(true): Randomizing Start Position");
             while (true)
             {
-                var gridCell = entireGrid[random.Next(entireGrid.Count)];
+                var gridCell = entireGrid.ElementAt(random.Next(entireGrid.Count));
                 if (gridCell?.Navigatable == TraversalSettings.Passable)
                 {
                     StartGridCell = gridCell;
@@ -250,7 +251,7 @@ namespace MonogamePathfinding
             //Debug.WriteLine("While(true): Randomizing End Position");
             while (true)
             {
-                var gridCell = entireGrid[random.Next(entireGrid.Count)];
+                var gridCell = entireGrid.ElementAt(random.Next(entireGrid.Count));
                 if (gridCell?.Navigatable == TraversalSettings.Passable)
                 {
                     EndGridCell = gridCell;
