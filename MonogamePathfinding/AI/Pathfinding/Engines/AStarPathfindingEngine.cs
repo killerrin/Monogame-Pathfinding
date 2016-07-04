@@ -57,11 +57,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
-            IPathfindingNode endingPathfindingNode = new PathfindingNode(endingGridNode);
+            IPathfindingNode endingPathfindingNode = NodeFactory.CreateNode(endingGridNode, null);
 
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
-            IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
+            IPathfindingNode startingPathfindingNode = NodeFactory.CreateNode(startingGridNode, null);
 
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));
             //openedList.Enqueue(new PriorityPathfindingNode(startingPathfindingNode), 0.0f);
@@ -81,7 +81,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                 List<IPathfindingNode> currentNodeNeighbors = new List<IPathfindingNode>();
                 foreach (var adjacentGridNode in adjacentGridNodes)
                 {
-                    currentNodeNeighbors.Add(new PathfindingNode(adjacentGridNode, currentNode));
+                    currentNodeNeighbors.Add(NodeFactory.CreateNode(adjacentGridNode, currentNode));
                 }
 
                 // Go through all the adjacentNodes and preform Pathfinding

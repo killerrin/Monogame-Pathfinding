@@ -38,11 +38,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
             // Cache the End Node
             IGridNode endingGridNode = Grid.FindNode(endPosition);
-            IPathfindingNode endingPathfindingNode = new PathfindingNode(endingGridNode);
+            IPathfindingNode endingPathfindingNode = NodeFactory.CreateNode(endingGridNode, null);
 
             // Get the starting node and add it to the opened list
             IGridNode startingGridNode = Grid.FindNode(startPosition);
-            IPathfindingNode startingPathfindingNode = new PathfindingNode(startingGridNode);
+            IPathfindingNode startingPathfindingNode = NodeFactory.CreateNode(startingGridNode, null);
             openedQueue.Enqueue(startingPathfindingNode);
 
             IPathfindingNode currentNode = null;
@@ -77,7 +77,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     }
 
                     // Otherwise, add it to the queue and continue to the next node
-                    var node = new PathfindingNode(adjacentGridNode, currentNode);
+                    var node = NodeFactory.CreateNode(adjacentGridNode, currentNode);
                     openedQueue.Enqueue(node);
                 }
 
