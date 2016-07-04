@@ -42,10 +42,14 @@
     <Compile Include="AI\Pathfinding\Engines\BreadthFirstSearchEngine.cs" />
     <Compile Include="AI\Pathfinding\Engines\IHeuristicPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\Events\PathfindingEventArgs.cs" />
+    <Compile Include="AI\Pathfinding\Grid\GridNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
-    <Compile Include="AI\Pathfinding\Grid\GridNodeExtensions.cs" />
+    <Compile Include="AI\Pathfinding\Grid\ThreadSafeGridNode.cs" />
+    <Compile Include="AI\Pathfinding\Grid\IGridNodeExtensions.cs" />
+    <Compile Include="AI\Pathfinding\Grid\IGridNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\Grid\PathfindingGrid.cs" />
-    <Compile Include="AI\Pathfinding\Grid\PathfindingGridExtensions.cs" />
+    <Compile Include="AI\Pathfinding\Grid\IPathfindingGridExtensions.cs" />
+    <Compile Include="AI\Pathfinding\Grid\ThreadSafeGridNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\DiagonalDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanSquaredDistance.cs" />
     <Compile Include="AI\Pathfinding\Heuristics\EuclideanDistance.cs" />
@@ -54,7 +58,7 @@
     <Compile Include="AI\Pathfinding\Grid\IPathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Grid\IGridNode.cs" />
     <Compile Include="AI\Pathfinding\Engines\IPathfindingEngine.cs" />
-    <Compile Include="AI\Pathfinding\PathfindingNodeExtensions.cs" />
+    <Compile Include="AI\Pathfinding\IPathfindingNodeExtensions.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />

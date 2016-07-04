@@ -9,17 +9,21 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
     public class PathfindingGrid : IPathfindingGrid
     {
         private IGridNode[,] Grid { get; }
+
+        public IGridNodeFactory NodeFactory { get; }
         public int Width { get { return Grid.GetLength(0); } }
         public int Height { get { return Grid.GetLength(1); } }
 
-        public PathfindingGrid(int width, int height)
+        public PathfindingGrid(IGridNodeFactory gridNodeFactory, int width, int height)
         {
-            Grid = new GridNode[width, height];
+            NodeFactory = gridNodeFactory;
+
+            Grid = new IGridNode[width, height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    Grid[x, y] = new GridNode(new NodePosition(x, y));
+                    Grid[x, y] = NodeFactory.CreateNode(new NodePosition(x, y));
                 }
             }
         }

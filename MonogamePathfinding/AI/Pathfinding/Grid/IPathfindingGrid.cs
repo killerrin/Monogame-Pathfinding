@@ -8,6 +8,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
 {
     public interface IPathfindingGrid
     {
+        IGridNodeFactory NodeFactory { get; }
         int Width { get; }
         int Height { get; }
 

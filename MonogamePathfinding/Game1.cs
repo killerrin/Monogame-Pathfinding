@@ -196,7 +196,7 @@ namespace MonogamePathfinding
             Debug.WriteLine("Resetting Grid");
             Path = null;
 
-            Grid = new PathfindingGrid(GRID_WIDTH, GRID_HEIGHT);
+            Grid = new PathfindingGrid(new ThreadSafeGridNodeFactory(), GRID_WIDTH, GRID_HEIGHT);
             var entireGrid = Grid.GetEntireGrid();
 
             if (GENERATE_MAZE)
@@ -307,6 +307,7 @@ namespace MonogamePathfinding
             }
 
             PathfindingEngine.PathFound += PathfindingEngine_PathFound;
+            PathfindingEngine.PathFailed += PathfindingEngine_PathFailed;
 
             if (!PERF_TEST)
                 PathfindingEngine.PathInProgress += PathfindingEngine_PathInProgress;
@@ -316,8 +317,11 @@ namespace MonogamePathfinding
         {
             Path = args.Result;
         }
-
         private void PathfindingEngine_PathFound(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)
+        {
+            Path = args.Result;
+        }
+        private void PathfindingEngine_PathFailed(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)
         {
             Path = args.Result;
         }
