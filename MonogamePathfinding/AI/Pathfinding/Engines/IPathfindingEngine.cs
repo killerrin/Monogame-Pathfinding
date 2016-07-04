@@ -19,5 +19,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
         event PathfindingEventHandler PathFound;
         event PathfindingEventHandler PathInProgress;
+        event PathfindingEventHandler PathFailed;
     }
 }

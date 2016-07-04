@@ -22,6 +22,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public IPathfindingGrid Grid { get; }
         public event PathfindingEventHandler PathFound;
         public event PathfindingEventHandler PathInProgress;
+        public event PathfindingEventHandler PathFailed;
 
         //IHeuristicPathfindingEngine
         public int BaseMovementCost { get; set; }
@@ -142,7 +143,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             }
 
             // Sadly, there is no path to our target so we return null
-            return new PathfindingResult(null, closedList.Values, new List<IPathfindingNode>());
+            var failedResult = new PathfindingResult(null, closedList.Values, quickSearchOpenedList.Values.ToList());
+
+            if (PathFailed != null)
+                PathFailed(this, new PathfindingEventArgs(failedResult));
+            return failedResult;
         }
     }
 

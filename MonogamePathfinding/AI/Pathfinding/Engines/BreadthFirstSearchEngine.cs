@@ -17,6 +17,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public IPathfindingGrid Grid { get; }
         public event PathfindingEventHandler PathFound;
         public event PathfindingEventHandler PathInProgress;
+        public event PathfindingEventHandler PathFailed;
 
         public BreadthFirstSearchEngine(bool allowHorizontalVerticalMovement, bool allowDiagonalMovement, IPathfindingGrid grid)
         {
@@ -70,7 +71,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
                         if (PathFound != null)
                             PathFound(this, new PathfindingEventArgs(result));
-
                         return result;
                     }
 
@@ -83,7 +83,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                     PathInProgress(this, new PathfindingEventArgs(new PathfindingResult(null, closedList.Values.ToList(), openedQueue.ToList())));
             }
 
-            return new PathfindingResult(null, closedList.Values, openedQueue);
+            var failedResult = new PathfindingResult(null, closedList.Values, openedQueue);
+
+            if (PathFailed != null)
+                PathFailed(this, new PathfindingEventArgs(failedResult));
+            return failedResult;
         }
     }
 }
