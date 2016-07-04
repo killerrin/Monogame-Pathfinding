@@ -58,11 +58,13 @@
     <Compile Include="AI\Pathfinding\Grid\IPathfindingGrid.cs" />
     <Compile Include="AI\Pathfinding\Grid\IGridNode.cs" />
     <Compile Include="AI\Pathfinding\Engines\IPathfindingEngine.cs" />
+    <Compile Include="AI\Pathfinding\IPathfindingNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNodeExtensions.cs" />
     <Compile Include="AI\Pathfinding\IPathfindingNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\NodePosition.cs" />
     <Compile Include="AI\Pathfinding\Grid\TraversalSettings.cs" />
     <Compile Include="AI\Pathfinding\PathfindingNode.cs" />
+    <Compile Include="AI\Pathfinding\PathfindingNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\PathfindingResult.cs" />
     <Compile Include="Collections\BinaryHeap.cs" />
     <Compile Include="Collections\IPriorityQueueNode.cs" />

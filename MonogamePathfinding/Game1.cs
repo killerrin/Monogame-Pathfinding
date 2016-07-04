@@ -298,19 +298,19 @@ namespace MonogamePathfinding
             switch (id)
             {
                 case 1:
-                    PathfindingEngine = new BreadthFirstSearchEngine(true, true, Grid);
+                    PathfindingEngine = new BreadthFirstSearchEngine(Grid, new PathfindingNodeFactory(), true, true);
                     break;
                 case 0:
                 default:
-                    PathfindingEngine = new AStarPathfindingEngine(true, 10, true, 14, Grid, new ManhattonDistance());
+                    PathfindingEngine = new AStarPathfindingEngine(Grid, new PathfindingNodeFactory(), true, 10, true, 14, new ManhattonDistance());
                     break;
             }
 
-            PathfindingEngine.PathFound += PathfindingEngine_PathFound;
-            PathfindingEngine.PathFailed += PathfindingEngine_PathFailed;
-
             if (!PERF_TEST)
                 PathfindingEngine.PathInProgress += PathfindingEngine_PathInProgress;
+
+            PathfindingEngine.PathFound += PathfindingEngine_PathFound;
+            PathfindingEngine.PathFailed += PathfindingEngine_PathFailed;
         }
 
         private void PathfindingEngine_PathInProgress(IPathfindingEngine sender, AI.Pathfinding.Events.PathfindingEventArgs args)

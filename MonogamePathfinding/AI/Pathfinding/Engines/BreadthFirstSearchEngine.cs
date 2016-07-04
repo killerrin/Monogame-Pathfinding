@@ -12,18 +12,20 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
     public class BreadthFirstSearchEngine : IPathfindingEngine
     {
+        public IPathfindingGrid Grid { get; }
+        public IPathfindingNodeFactory NodeFactory { get; }
         public bool AllowDiagonalMovement { get; set; }
         public bool AllowHorizontalVerticalMovement { get; set; }
-        public IPathfindingGrid Grid { get; }
         public event PathfindingEventHandler PathFound;
         public event PathfindingEventHandler PathInProgress;
         public event PathfindingEventHandler PathFailed;
 
-        public BreadthFirstSearchEngine(bool allowHorizontalVerticalMovement, bool allowDiagonalMovement, IPathfindingGrid grid)
+        public BreadthFirstSearchEngine(IPathfindingGrid grid, IPathfindingNodeFactory nodeFactory, bool allowHorizontalVerticalMovement, bool allowDiagonalMovement)
         {
+            Grid = grid;
+            NodeFactory = nodeFactory;
             AllowHorizontalVerticalMovement = allowHorizontalVerticalMovement;
             AllowDiagonalMovement = allowDiagonalMovement;
-            Grid = grid;
         }
 
         public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)

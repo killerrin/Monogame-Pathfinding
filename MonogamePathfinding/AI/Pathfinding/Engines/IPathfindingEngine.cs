@@ -11,9 +11,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 {
     public interface IPathfindingEngine
     {
+        IPathfindingGrid Grid { get; }
+        IPathfindingNodeFactory NodeFactory { get; }
+
         bool AllowHorizontalVerticalMovement { get; set; }
         bool AllowDiagonalMovement { get; set; }
-        IPathfindingGrid Grid { get; }
 
         PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition);
 

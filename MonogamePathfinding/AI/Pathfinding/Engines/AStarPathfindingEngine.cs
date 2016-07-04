@@ -17,9 +17,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
     public class AStarPathfindingEngine : IHeuristicPathfindingEngine
     {
         //IPathfindingEngine
+        public IPathfindingGrid Grid { get; }
+        public IPathfindingNodeFactory NodeFactory { get; }
         public bool AllowHorizontalVerticalMovement { get; set; }
         public bool AllowDiagonalMovement { get; set; }
-        public IPathfindingGrid Grid { get; }
         public event PathfindingEventHandler PathFound;
         public event PathfindingEventHandler PathInProgress;
         public event PathfindingEventHandler PathFailed;
@@ -29,11 +30,12 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         public int BaseDiagonalMovementCost { get; set; }
         public IPathfindingHeuristic Heuristic { get; set; }
 
-        public AStarPathfindingEngine(bool allowHorizontalVerticalMovement, int movementCost, bool allowDiagonalMovement, int diagonalMovementCost, IPathfindingGrid grid, IPathfindingHeuristic heuristic)
+        public AStarPathfindingEngine(IPathfindingGrid grid, IPathfindingNodeFactory nodeFactory, bool allowHorizontalVerticalMovement, int movementCost, bool allowDiagonalMovement, int diagonalMovementCost, IPathfindingHeuristic heuristic)
         {
+            Grid = grid;
+            NodeFactory = nodeFactory;
             AllowHorizontalVerticalMovement = allowHorizontalVerticalMovement;
             AllowDiagonalMovement = allowDiagonalMovement;
-            Grid = grid;
 
             BaseMovementCost = movementCost;
             BaseDiagonalMovementCost = diagonalMovementCost;
