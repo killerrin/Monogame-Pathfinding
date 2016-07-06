@@ -52,7 +52,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
             return true;
         }
 
-        public IReadOnlyCollection<IGridNode> GetEntireGrid()
+        public IReadOnlyCollection<IGridNode> GetAllNodes()
         {
             List<IGridNode> nodes = new List<IGridNode>();
             for (int x = 0; x < Width; x++)

@@ -115,7 +115,7 @@ namespace MonogamePathfinding
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            var entireGrid = Grid.GetEntireGrid();
+            var entireGrid = Grid.GetAllNodes();
             spriteBatch.Begin();
 
             // Draw the Grid
@@ -198,7 +198,7 @@ namespace MonogamePathfinding
             Path = null;
 
             Grid = new PathfindingGrid(new ThreadSafeGridNodeFactory(), GRID_WIDTH, GRID_HEIGHT);
-            var entireGrid = Grid.GetEntireGrid();
+            var entireGrid = Grid.GetAllNodes();
 
             if (GENERATE_MAZE)
             {
@@ -233,7 +233,7 @@ namespace MonogamePathfinding
             Debug.WriteLine("Randomize Start End Positions");
             Path = null;
 
-            var entireGrid = Grid.GetEntireGrid();
+            var entireGrid = Grid.GetAllNodes();
             if (entireGrid.Count == 0) return;
 
             //Debug.WriteLine("While(true): Randomizing Start Position");

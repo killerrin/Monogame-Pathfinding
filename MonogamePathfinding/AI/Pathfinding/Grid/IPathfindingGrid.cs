@@ -18,7 +18,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         bool WithinGrid(NodePosition position);
         bool WithinGrid(int x, int y);
 
-        IReadOnlyCollection<IGridNode> GetEntireGrid();
+        IReadOnlyCollection<IGridNode> GetAllNodes();
         IReadOnlyCollection<IGridNode> GetXColumn(int column);
         IReadOnlyCollection<IGridNode> GetYRow(int row);
 

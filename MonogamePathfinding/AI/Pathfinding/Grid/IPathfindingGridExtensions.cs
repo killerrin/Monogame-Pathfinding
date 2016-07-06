@@ -15,7 +15,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
 
         public static int TotalTraversalNodes(this IPathfindingGrid grid, TraversalSettings traversal)
         {
-            var entireGrid = grid.GetEntireGrid();
+            var entireGrid = grid.GetAllNodes();
             int total = 0;
             foreach (var node in entireGrid)
             {
