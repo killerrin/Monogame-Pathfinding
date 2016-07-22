@@ -42,6 +42,11 @@
     <Compile Include="AI\Pathfinding\Engines\BreadthFirstSearchEngine.cs" />
     <Compile Include="AI\Pathfinding\Engines\IHeuristicPathfindingEngine.cs" />
     <Compile Include="AI\Pathfinding\Events\PathfindingEventArgs.cs" />
+    <Compile Include="AI\Pathfinding\Graph\GraphNodeFactory.cs" />
+    <Compile Include="AI\Pathfinding\Graph\IGraphNodeFactory.cs" />
+    <Compile Include="AI\Pathfinding\Graph\IPathfindingGraph.cs" />
+    <Compile Include="AI\Pathfinding\Graph\IGraphNode.cs" />
+    <Compile Include="AI\Pathfinding\Graph\IGraphNodeConnection.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\Grid\GridNode.cs" />
     <Compile Include="AI\Pathfinding\Grid\ThreadSafeGridNode.cs" />

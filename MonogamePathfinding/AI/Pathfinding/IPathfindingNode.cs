@@ -12,6 +12,6 @@ namespace MonogamePathfinding.AI.Pathfinding
         IPathfindingNode Parent { get; set; }
         IGridNode GridNode { get; }
 
-        int TotalMovementCost { get; set; }
+        int CurrentMovementCost { get; set; }
     }
 }

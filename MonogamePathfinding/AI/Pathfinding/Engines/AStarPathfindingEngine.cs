@@ -108,21 +108,21 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
                         node.Parent = currentNode;
 
                         var baseMovement = node.GridNode.Position.IsNextTo(currentNode.GridNode.Position) ? BaseMovementCost : BaseDiagonalMovementCost;
-                        int newMovementCost = currentNode.TotalMovementCost + currentNode.GridNode.MovementCost + baseMovement;
+                        int newMovementCost = currentNode.CurrentMovementCost + currentNode.GridNode.MovementCost + baseMovement;
 
                         if (quickSearchOpenedList.ContainsKey(node.GridNode.Key()))
                         {
                             //if (newMovementCost < node.GridNode.MovementCost)
-                            if (newMovementCost < node.TotalMovementCost)
+                            if (newMovementCost < node.CurrentMovementCost)
                             {
                                 //node.GridNode.MovementCost = newMovementCost;
-                                node.TotalMovementCost = newMovementCost;
+                                node.CurrentMovementCost = newMovementCost;
                             }
                         }
                         else
                         {
                             //node.GridNode.MovementCost = newMovementCost;
-                            node.TotalMovementCost = newMovementCost;
+                            node.CurrentMovementCost = newMovementCost;
 
                             float heuristic = Heuristic.CalculateHeuristic(node.GridNode.Position, endingPathfindingNode.GridNode.Position,
                                 node.GridNode.MovementCost + BaseMovementCost,

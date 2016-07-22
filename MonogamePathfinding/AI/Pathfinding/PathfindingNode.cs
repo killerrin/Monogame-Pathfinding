@@ -11,7 +11,7 @@ namespace MonogamePathfinding.AI.Pathfinding
     {
         public IPathfindingNode Parent { get; set; }
         public IGridNode GridNode { get; }
-        public int TotalMovementCost { get; set; }
+        public int CurrentMovementCost { get; set; }
 
         public PathfindingNode(IGridNode gridNode) : this(gridNode, null) { }
         public PathfindingNode(IGridNode gridNode, IPathfindingNode parent)
