@@ -1,5 +1,5 @@
 ﻿using MonogamePathfinding.AI.Pathfinding.Events;
-using MonogamePathfinding.AI.Pathfinding.Grid;
+using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 using MonogamePathfinding.AI.Pathfinding.Heuristics;
 using System;
 using System.Collections.Generic;

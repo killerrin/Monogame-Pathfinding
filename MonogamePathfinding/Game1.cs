@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.InputListeners;
 using MonogamePathfinding.AI.Pathfinding;
 using MonogamePathfinding.AI.Pathfinding.Engines;
-using MonogamePathfinding.AI.Pathfinding.Grid;
+using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 using MonogamePathfinding.AI.Pathfinding.Heuristics;
 using System;
 using System.Linq;

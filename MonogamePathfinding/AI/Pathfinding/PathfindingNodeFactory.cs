@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonogamePathfinding.AI.Pathfinding.Grid;
+using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 
 namespace MonogamePathfinding.AI.Pathfinding
 {

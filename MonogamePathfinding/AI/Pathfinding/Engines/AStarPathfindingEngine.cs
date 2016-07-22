@@ -1,4 +1,4 @@
-﻿using MonogamePathfinding.AI.Pathfinding.Grid;
+﻿using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 using MonogamePathfinding.AI.Pathfinding.Heuristics;
 using MonogamePathfinding.Collections;
 using System;

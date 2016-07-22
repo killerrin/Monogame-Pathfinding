@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonogamePathfinding.AI.Pathfinding.Events;
-using MonogamePathfinding.AI.Pathfinding.Grid;
+using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 

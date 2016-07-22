@@ -1,4 +1,4 @@
-﻿using MonogamePathfinding.AI.Pathfinding.Grid;
+﻿using MonogamePathfinding.AI.Pathfinding.Graph.Grid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
