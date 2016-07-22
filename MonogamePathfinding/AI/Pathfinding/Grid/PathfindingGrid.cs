@@ -11,6 +11,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         private IGridNode[,] Grid { get; }
 
         public IGridNodeFactory NodeFactory { get; }
+
+        public int NodeCount { get { return Width * Height; } }
         public int Width { get { return Grid.GetLength(0); } }
         public int Height { get { return Grid.GetLength(1); } }
 
@@ -34,14 +36,14 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
         public IGridNode FindNode(NodePosition position) => FindNode(position.X, position.Y);
         public IGridNode FindNode(int x, int y)
         {
-            if (!WithinGrid(x, y))
+            if (!NodeExists(x, y))
                 return null;
 
             return Grid[x, y];
         }
 
-        public bool WithinGrid(NodePosition position) => WithinGrid(position.X, position.Y);
-        public bool WithinGrid(int x, int y)
+        public bool NodeExists(NodePosition position) => NodeExists(position.X, position.Y);
+        public bool NodeExists(int x, int y)
         {
             if (x < 0 || y < 0)
                 return false;

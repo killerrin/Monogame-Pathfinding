@@ -9,14 +9,16 @@ namespace MonogamePathfinding.AI.Pathfinding.Grid
     public interface IPathfindingGrid
     {
         IGridNodeFactory NodeFactory { get; }
+
+        int NodeCount { get; }
         int Width { get; }
         int Height { get; }
 
         IGridNode FindNode(int x, int y);
         IGridNode FindNode(NodePosition position);
 
-        bool WithinGrid(NodePosition position);
-        bool WithinGrid(int x, int y);
+        bool NodeExists(NodePosition position);
+        bool NodeExists(int x, int y);
 
         IReadOnlyCollection<IGridNode> GetAllNodes();
         IReadOnlyCollection<IGridNode> GetXColumn(int column);

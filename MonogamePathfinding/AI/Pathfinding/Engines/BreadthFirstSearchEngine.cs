@@ -30,8 +30,8 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
 
         public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
         {
-            if (!Grid.WithinGrid(startPosition)) return null;
-            if (!Grid.WithinGrid(endPosition)) return null;
+            if (!Grid.NodeExists(startPosition)) return null;
+            if (!Grid.NodeExists(endPosition)) return null;
 
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
             Queue<IPathfindingNode> openedQueue = new Queue<IPathfindingNode>();
