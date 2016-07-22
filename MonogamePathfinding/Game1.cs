@@ -288,7 +288,7 @@ namespace MonogamePathfinding
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var path = PathfindingEngine.FindPath(StartGridCell.Position, EndGridCell.Position);
+            var path = PathfindingEngine.FindPath(StartGridCell, EndGridCell);
 
             stopwatch.Stop();
             Debug.WriteLine($"Total Time: {stopwatch.ElapsedMilliseconds}ms, {stopwatch.Elapsed.TotalSeconds}s | Path Found: {path.Path != null} | Total Searched Nodes:{((ICollection)path.ClosedList).Count}");

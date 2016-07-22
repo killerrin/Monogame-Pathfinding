@@ -48,6 +48,7 @@
     <Compile Include="AI\Pathfinding\Graph\GraphNodeFactory.cs" />
     <Compile Include="AI\Pathfinding\Graph\IGraphNodeConnectionFactory.cs" />
     <Compile Include="AI\Pathfinding\Graph\IGraphNodeFactory.cs" />
+    <Compile Include="AI\Pathfinding\Graph\IPathfindingGraphExtensions.cs" />
     <Compile Include="AI\Pathfinding\Graph\IPathfindingGraph.cs" />
     <Compile Include="AI\Pathfinding\Graph\IGraphNode.cs" />
     <Compile Include="AI\Pathfinding\Graph\IGraphNodeConnection.cs" />

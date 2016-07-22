@@ -28,20 +28,20 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             AllowDiagonalMovement = allowDiagonalMovement;
         }
 
-        public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
+        public PathfindingResult FindPath(IGridNode start, IGridNode end)
         {
-            if (!Grid.NodeExists(startPosition)) return null;
-            if (!Grid.NodeExists(endPosition)) return null;
+            if (!Grid.NodeExists(start.Position)) return null;
+            if (!Grid.NodeExists(end.Position)) return null;
 
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
             Queue<IPathfindingNode> openedQueue = new Queue<IPathfindingNode>();
 
             // Cache the End Node
-            IGridNode endingGridNode = Grid.FindNode(endPosition);
+            IGridNode endingGridNode = Grid.FindNode(end.Position);
             IPathfindingNode endingPathfindingNode = NodeFactory.CreateNode(endingGridNode, null);
 
             // Get the starting node and add it to the opened list
-            IGridNode startingGridNode = Grid.FindNode(startPosition);
+            IGridNode startingGridNode = Grid.FindNode(start.Position);
             IPathfindingNode startingPathfindingNode = NodeFactory.CreateNode(startingGridNode, null);
             openedQueue.Enqueue(startingPathfindingNode);
 

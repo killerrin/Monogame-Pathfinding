@@ -8,11 +8,6 @@ namespace MonogamePathfinding.AI.Pathfinding.Graph.Grid
 {
     public static class IPathfindingGridExtensions
     {
-        public static int TotalNodes(this IPathfindingGrid grid)
-        {
-            return grid.Width * grid.Height;
-        }
-
         public static int TotalTraversalNodes(this IPathfindingGrid grid, TraversalSettings traversal)
         {
             var entireGrid = grid.GetAllNodes();

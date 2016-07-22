@@ -42,10 +42,10 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             Heuristic = heuristic;
         }
 
-        public PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition)
+        public PathfindingResult FindPath(IGridNode start, IGridNode end)
         {
-            if (!Grid.NodeExists(startPosition)) return null;
-            if (!Grid.NodeExists(endPosition)) return null;
+            if (!Grid.NodeExists(start.Position)) return null;
+            if (!Grid.NodeExists(end.Position)) return null;
 
             // Create the opened and closed lists
             Dictionary<UInt64, IPathfindingNode> closedList = new Dictionary<ulong, IPathfindingNode>();
@@ -56,11 +56,11 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
             BinaryHeap<float, IPathfindingNode> openedList = BinaryHeap<float, IPathfindingNode>.MinBinaryHeap(4);
 
             // Cache the End Node
-            IGridNode endingGridNode = Grid.FindNode(endPosition);
+            IGridNode endingGridNode = Grid.FindNode(end.Position);
             IPathfindingNode endingPathfindingNode = NodeFactory.CreateNode(endingGridNode, null);
 
             // Get the starting node and add it to the opened list
-            IGridNode startingGridNode = Grid.FindNode(startPosition);
+            IGridNode startingGridNode = Grid.FindNode(start.Position);
             IPathfindingNode startingPathfindingNode = NodeFactory.CreateNode(startingGridNode, null);
 
             //openedList.Enqueue(new PriorityQueueNode<IPathfindingNode>(0, startingPathfindingNode));

@@ -17,7 +17,7 @@ namespace MonogamePathfinding.AI.Pathfinding.Engines
         bool AllowHorizontalVerticalMovement { get; set; }
         bool AllowDiagonalMovement { get; set; }
 
-        PathfindingResult FindPath(NodePosition startPosition, NodePosition endPosition);
+        PathfindingResult FindPath(IGridNode start, IGridNode end);
 
         event PathfindingEventHandler PathFound;
         event PathfindingEventHandler PathInProgress;
